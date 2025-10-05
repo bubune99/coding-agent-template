@@ -15,8 +15,7 @@ export async function getExecutionMode(): Promise<ExecutionMode> {
     if (userPreference === 'docker' || userPreference === 'vercel') {
       // Validate user preference against available resources
       if (userPreference === 'vercel') {
-        const hasVercelTokens =
-          process.env.VERCEL_TEAM_ID && process.env.VERCEL_PROJECT_ID && process.env.VERCEL_TOKEN
+        const hasVercelTokens = process.env.VERCEL_TEAM_ID && process.env.VERCEL_PROJECT_ID && process.env.VERCEL_TOKEN
         if (hasVercelTokens) {
           return 'vercel'
         }

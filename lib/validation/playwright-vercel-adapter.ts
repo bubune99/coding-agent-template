@@ -12,7 +12,10 @@ import { TestExecutionResult } from './test-executor'
 /**
  * Install Playwright with serverless-optimized Chromium for Vercel Sandbox
  */
-export async function installPlaywrightVercel(sandbox: Sandbox, logger: TaskLogger): Promise<{ success: boolean; error?: string }> {
+export async function installPlaywrightVercel(
+  sandbox: Sandbox,
+  logger: TaskLogger,
+): Promise<{ success: boolean; error?: string }> {
   try {
     await logger.info('Installing Playwright for Vercel Sandbox (serverless mode)...')
 

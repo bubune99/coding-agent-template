@@ -6,6 +6,8 @@
 import NextAuth from 'next-auth'
 import type { NextAuthConfig } from 'next-auth'
 
+export type UserType = 'guest' | 'regular'
+
 const config: NextAuthConfig = {
   providers: [],
   pages: {
