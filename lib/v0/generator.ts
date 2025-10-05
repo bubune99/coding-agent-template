@@ -39,37 +39,23 @@ export async function generateV0Component(
 
     await logger.info('🎨 Generating UI component with v0...')
 
-    // Configure v0 client
-    const client = createClient({
-      apiKey: process.env.V0_API_KEY,
-    })
-
-    // Generate component
-    const result = await client.generate({
-      prompt: request.prompt,
-      framework: request.framework || 'react',
-      styling: request.styling || 'tailwind',
-    })
-
-    if (!result || !result.code) {
-      return {
-        success: false,
-        error: 'v0 returned no code',
-      }
-    }
-
-    await logger.success('✅ v0 component generated successfully')
-
-    // Extract component name from code or prompt
-    const componentName = extractComponentName(result.code, request.prompt)
-    const filePath = determineFilePath(componentName, request.framework || 'react')
+    // Note: v0 SDK is for chat-based UI generation, not standalone component generation
+    // This would need to use the chat API to generate components
+    // For now, return an error indicating this feature is not yet implemented
 
     return {
-      success: true,
-      code: result.code,
-      componentName,
-      filePath,
+      success: false,
+      error: 'v0 component generation is not yet implemented. Use the chat interface at /chats to generate UI components.',
     }
+
+    // TODO: Implement v0 chat-based component generation
+    // const client = createClient({
+    //   apiKey: process.env.V0_API_KEY,
+    // })
+    // const chat = await client.chats.create({
+    //   message: request.prompt,
+    //   ...
+    // })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     await logger.error(`v0 generation failed: ${message}`)

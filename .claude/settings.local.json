@@ -11,7 +11,8 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nIntegrate v0-clone UI components with existing platform\n\nMerged v0''s chat UI and live preview components into the existing AI coding agent platform to enable dual-mode functionality: Build App mode (v0 generation) and Add Features mode (validation with agents).\n\nKey changes:\n- Organized v0 components in components/v0/ namespace\n- Created separate UI variants in components/ui-v0/ to avoid conflicts\n- Merged v0 database schema (users, chat_ownerships, anonymous_chat_logs)\n- Updated all v0 import paths to use new namespaces\n- Added v0 dependencies (swr, streamdown, use-stick-to-bottom, etc.)\n- Wrapped layout with StreamingProvider and SWRProvider\n- Created hooks-v0/ directory with v0 hooks\n- Added middleware with health check endpoint\n- Created test page at /test-v0 for integration verification\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(pnpm run:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
