@@ -1,18 +1,3 @@
-import type { UserType } from '@/app/(auth)/auth'
-
-// NextAuth type extensions
-declare module 'next-auth' {
-  interface User {
-    type: UserType
-  }
-
-  interface Session {
-    user: User & {
-      id: string
-    }
-  }
-}
-
 // Speech Recognition API types
 interface SpeechRecognition extends EventTarget {
   continuous: boolean
