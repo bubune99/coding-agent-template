@@ -70,7 +70,7 @@ Generate a Playwright test file that validates these changes work correctly.`
       system: systemPrompt,
       prompt: userPrompt,
       temperature: 0.3, // Lower temperature for more consistent code generation
-      maxTokens: 2000,
+      maxSteps: 1, // Single-step generation
     })
 
     // Extract code from response (remove markdown code blocks if present)
