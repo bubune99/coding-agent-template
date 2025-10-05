@@ -39,7 +39,7 @@ export class VersionController {
     try {
       await this.logger.info(`Creating version snapshot: ${message}`)
 
-      const mode = getExecutionMode()
+      const mode = await getExecutionMode()
 
       // Stage all changes
       const addResult = await this.runGitCommand(['add', '.'])
@@ -185,7 +185,7 @@ export class VersionController {
   private async runGitCommand(
     args: string[],
   ): Promise<{ success: boolean; output?: string; error?: string; exitCode?: number }> {
-    const mode = getExecutionMode()
+    const mode = await getExecutionMode()
 
     if (mode === 'docker') {
       const container = this.sandbox as DockerContainer

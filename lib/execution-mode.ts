@@ -2,10 +2,34 @@
  * Determines the execution mode: Docker (local) or Vercel Sandbox (cloud)
  */
 
+import { cookies } from 'next/headers'
+
 export type ExecutionMode = 'docker' | 'vercel'
 
-export function getExecutionMode(): ExecutionMode {
-  // Check environment variable
+export async function getExecutionMode(): Promise<ExecutionMode> {
+  // 1. Check user preference from cookies (highest priority)
+  try {
+    const cookieStore = await cookies()
+    const userPreference = cookieStore.get('execution_mode')?.value as ExecutionMode | undefined
+
+    if (userPreference === 'docker' || userPreference === 'vercel') {
+      // Validate user preference against available resources
+      if (userPreference === 'vercel') {
+        const hasVercelTokens =
+          process.env.VERCEL_TEAM_ID && process.env.VERCEL_PROJECT_ID && process.env.VERCEL_TOKEN
+        if (hasVercelTokens) {
+          return 'vercel'
+        }
+        // Fall through to auto-detection if tokens not available
+      } else {
+        return 'docker'
+      }
+    }
+  } catch {
+    // cookies() not available in this context, continue with env-based detection
+  }
+
+  // 2. Check environment variable override
   const mode = process.env.EXECUTION_MODE?.toLowerCase()
 
   if (mode === 'docker') {
@@ -16,8 +40,7 @@ export function getExecutionMode(): ExecutionMode {
     return 'vercel'
   }
 
-  // Default: Use Docker if running locally (NODE_ENV !== 'production')
-  // Or if Vercel tokens are not configured
+  // 3. Auto-detect based on environment
   const hasVercelTokens = process.env.VERCEL_TEAM_ID && process.env.VERCEL_PROJECT_ID && process.env.VERCEL_TOKEN
 
   if (!hasVercelTokens) {
@@ -29,14 +52,14 @@ export function getExecutionMode(): ExecutionMode {
     return 'vercel'
   }
 
-  // Default to Docker for local development
-  return 'docker'
+  // Default to Vercel if tokens are available (allows cloud dev)
+  return 'vercel'
 }
 
-export function isDockerMode(): boolean {
-  return getExecutionMode() === 'docker'
+export async function isDockerMode(): Promise<boolean> {
+  return (await getExecutionMode()) === 'docker'
 }
 
-export function isVercelMode(): boolean {
-  return getExecutionMode() === 'vercel'
+export async function isVercelMode(): Promise<boolean> {
+  return (await getExecutionMode()) === 'vercel'
 }

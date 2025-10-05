@@ -79,7 +79,7 @@ async function writeV0ComponentToSandbox(
   filePath: string,
   logger: TaskLogger,
 ): Promise<boolean> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
 
   try {
     // Create directory

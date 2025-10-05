@@ -22,7 +22,7 @@ export type UnifiedSandbox = Sandbox | DockerContainer
  * Create a sandbox (Docker or Vercel) based on execution mode
  */
 export async function createUnifiedSandbox(config: SandboxConfig, logger: TaskLogger): Promise<SandboxResult> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
 
   await logger.info(`Using ${mode} execution mode`)
 
@@ -44,7 +44,7 @@ export async function executeAgentInUnifiedSandbox(
   selectedModel?: string,
   onCancellationCheck?: () => Promise<boolean>,
 ): Promise<AgentExecutionResult> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
 
   if (mode === 'docker') {
     return executeAgentInDocker(
@@ -69,7 +69,7 @@ export async function pushChangesToBranchUnified(
   commitMessage: string,
   logger: TaskLogger,
 ): Promise<{ success: boolean; pushFailed?: boolean; error?: string }> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
 
   if (mode === 'docker') {
     const container = sandbox as DockerContainer
@@ -120,7 +120,7 @@ export async function shutdownUnifiedSandbox(
   sandbox: UnifiedSandbox,
   taskId: string,
 ): Promise<{ success: boolean; error?: string }> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
 
   if (mode === 'docker') {
     const container = sandbox as DockerContainer

@@ -3,6 +3,7 @@ import { Sandbox } from '@vercel/sandbox'
 import { TaskLogger } from '../utils/task-logger'
 import { UnifiedSandbox } from '../unified-sandbox'
 import { getExecutionMode } from '../execution-mode'
+import { installPlaywrightVercel, executePlaywrightTestsVercel } from './playwright-vercel-adapter'
 
 export interface TestExecutionResult {
   success: boolean
@@ -22,7 +23,7 @@ export async function installPlaywright(
   sandbox: UnifiedSandbox,
   logger: TaskLogger,
 ): Promise<{ success: boolean; error?: string }> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
 
   try {
     await logger.info('Installing Playwright...')
@@ -50,27 +51,8 @@ export async function installPlaywright(
     } else {
       const vercelSandbox = sandbox as Sandbox
 
-      // Install Playwright
-      const installCmd = await vercelSandbox.runCommand('npm', ['install', '-D', '@playwright/test'])
-      const installStdout = await installCmd.stdout()
-      const installStderr = await installCmd.stderr()
-
-      if (installCmd.exitCode !== 0) {
-        return { success: false, error: `Failed to install Playwright: ${installStderr}` }
-      }
-
-      // Install browsers
-      await logger.info('Installing Playwright browsers...')
-      const browsersCmd = await vercelSandbox.runCommand('npx', ['playwright', 'install', 'chromium', '--with-deps'])
-      const browsersStderr = await browsersCmd.stderr()
-
-      if (browsersCmd.exitCode !== 0) {
-        await logger.info('Failed with deps, trying without...')
-        const fallbackCmd = await vercelSandbox.runCommand('npx', ['playwright', 'install', 'chromium'])
-        if (fallbackCmd.exitCode !== 0) {
-          return { success: false, error: 'Failed to install Playwright browsers' }
-        }
-      }
+      // Use serverless-optimized installation for Vercel Sandbox
+      return installPlaywrightVercel(vercelSandbox, logger)
     }
 
     await logger.success('Playwright installed successfully')
@@ -90,7 +72,7 @@ export async function writeTestFile(
   testFilePath: string,
   logger: TaskLogger,
 ): Promise<{ success: boolean; error?: string }> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
 
   try {
     await logger.info(`Writing test file to ${testFilePath}...`)
@@ -149,7 +131,7 @@ export async function executePlaywrightTests(
   testFilePath: string,
   logger: TaskLogger,
 ): Promise<TestExecutionResult> {
-  const mode = getExecutionMode()
+  const mode = await getExecutionMode()
   const startTime = Date.now()
 
   try {
@@ -179,18 +161,8 @@ export async function executePlaywrightTests(
     } else {
       const vercelSandbox = sandbox as Sandbox
 
-      const testCmd = await vercelSandbox.runCommand('npx', [
-        'playwright',
-        'test',
-        testFilePath,
-        '--reporter=json',
-        '--timeout=30000',
-      ])
-
-      const stdout = await testCmd.stdout()
-      const stderr = await testCmd.stderr()
-      output = stdout + '\n' + stderr
-      exitCode = testCmd.exitCode
+      // Use serverless-optimized execution for Vercel Sandbox
+      return executePlaywrightTestsVercel(vercelSandbox, testFilePath, logger)
     }
 
     const duration = Date.now() - startTime
