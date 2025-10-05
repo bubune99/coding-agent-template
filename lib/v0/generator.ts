@@ -4,7 +4,7 @@
  * Integrates v0 Platform API to generate UI components
  */
 
-import { v0 } from 'v0-sdk'
+import { createClient } from 'v0-sdk'
 import { TaskLogger } from '../utils/task-logger'
 
 export interface V0GenerationRequest {
@@ -40,7 +40,7 @@ export async function generateV0Component(
     await logger.info('🎨 Generating UI component with v0...')
 
     // Configure v0 client
-    const client = v0({
+    const client = createClient({
       apiKey: process.env.V0_API_KEY,
     })
 
