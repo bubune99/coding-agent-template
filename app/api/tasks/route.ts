@@ -368,10 +368,6 @@ async function processTask(
       await logger.success(`${selectedAgent} agent execution completed`)
       await logger.info(agentResult.output || 'Code changes applied successfully')
 
-      if (agentResult.agentResponse) {
-        await logger.info(`Agent Response: ${agentResult.agentResponse}`)
-      }
-
       // Agent execution logs are already logged in real-time by the agent
       // No need to log them again here
 
