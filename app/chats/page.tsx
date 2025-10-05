@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { ChatsClient } from '@/components/chats/chats-client'
+import { ChatsClient } from '@/components/v0/chats/chats-client'
 
 export default function ChatsPage() {
   return (

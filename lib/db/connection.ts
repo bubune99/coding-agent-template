@@ -2,9 +2,7 @@ import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import * as schema from './schema'
 
-// Load environment variables
-import { config } from 'dotenv'
-config()
+// Environment variables are loaded by Next.js automatically
 
 let db: any = null
 

@@ -10,9 +10,11 @@ import {
   type ChatOwnership,
   type AnonymousChatLog,
 } from './schema'
-import { generateUUID } from '../utils'
+import { nanoid } from 'nanoid'
 import { generateHashedPassword } from './utils'
 import db from './connection'
+
+const generateUUID = () => nanoid()
 
 export async function getUser(email: string): Promise<Array<User>> {
   try {
