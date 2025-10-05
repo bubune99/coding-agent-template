@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse, after } from 'next/server'
-import { Sandbox } from '@vercel/sandbox'
 import { db } from '@/lib/db/client'
 import { tasks, insertTaskSchema } from '@/lib/db/schema'
 import { generateId } from '@/lib/utils/id'
-import { createSandbox } from '@/lib/sandbox/creation'
-import { executeAgentInSandbox, AgentType } from '@/lib/sandbox/agents'
-import { pushChangesToBranch, shutdownSandbox } from '@/lib/sandbox/git'
-import { registerSandbox, unregisterSandbox } from '@/lib/sandbox/sandbox-registry'
+import {
+  createUnifiedSandbox,
+  pushChangesToBranchUnified,
+  shutdownUnifiedSandbox,
+  UnifiedSandbox,
+} from '@/lib/unified-sandbox'
+import { AgentType } from '@/lib/sandbox/agents'
+import { executeAgentWithValidation, DEFAULT_VALIDATION_CONFIG } from '@/lib/validation/orchestrator'
 import { eq, desc, or } from 'drizzle-orm'
-import { createInfoLog } from '@/lib/utils/logging'
 import { createTaskLogger } from '@/lib/utils/task-logger'
 import { generateBranchName, createFallbackBranchName } from '@/lib/utils/branch-name-generator'
 
@@ -227,7 +229,7 @@ async function processTask(
   installDependencies: boolean = false,
   maxDuration: number = 5,
 ) {
-  let sandbox: Sandbox | null = null
+  let sandbox: UnifiedSandbox | null = null
   const logger = createTaskLogger(taskId)
 
   try {
@@ -258,8 +260,8 @@ async function processTask(
 
     await logger.updateProgress(15, 'Creating sandbox environment...')
 
-    // Create sandbox with progress callback and 5-minute timeout
-    const sandboxResult = await createSandbox(
+    // Create sandbox with progress callback and 5-minute timeout (Docker or Vercel)
+    const sandboxResult = await createUnifiedSandbox(
       {
         taskId,
         repoUrl,
@@ -299,7 +301,7 @@ async function processTask(
       // Clean up sandbox if it was created
       if (sandboxResult.sandbox) {
         try {
-          await shutdownSandbox(sandboxResult.sandbox)
+          await shutdownUnifiedSandbox(sandboxResult.sandbox, taskId)
         } catch (error) {
           console.error('Failed to cleanup sandbox after stop:', error)
         }
@@ -330,38 +332,36 @@ async function processTask(
     }
 
     // Log agent execution start
-    await logger.updateProgress(50, `Installing and executing ${selectedAgent} agent...`)
-
-    // Execute selected agent with timeout (different timeouts per agent)
-    const getAgentTimeout = (agent: string) => {
-      switch (agent) {
-        case 'cursor':
-          return 5 * 60 * 1000 // 5 minutes for cursor (needs more time)
-        case 'claude':
-        case 'codex':
-        case 'opencode':
-        default:
-          return 3 * 60 * 1000 // 3 minutes for other agents
-      }
-    }
-
-    const AGENT_TIMEOUT_MS = getAgentTimeout(selectedAgent)
-    const timeoutMinutes = Math.floor(AGENT_TIMEOUT_MS / (60 * 1000))
-
-    const agentTimeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => {
-        reject(new Error(`${selectedAgent} agent execution timed out after ${timeoutMinutes} minutes`))
-      }, AGENT_TIMEOUT_MS)
-    })
+    await logger.updateProgress(50, `Installing and executing ${selectedAgent} agent with validation...`)
 
     if (!sandbox) {
       throw new Error('Sandbox is not available for agent execution')
     }
 
-    const agentResult = await Promise.race([
-      executeAgentInSandbox(sandbox, prompt, selectedAgent as AgentType, logger, selectedModel),
-      agentTimeoutPromise,
-    ])
+    // Execute agent with validation (includes retry logic and rollback)
+    const validationResult = await executeAgentWithValidation(
+      sandbox,
+      prompt,
+      selectedAgent as AgentType,
+      logger,
+      selectedModel,
+      {
+        ...DEFAULT_VALIDATION_CONFIG,
+        enableValidation: true, // Enable validation by default
+        maxAttempts: 3,
+      },
+      async () => await isTaskStopped(taskId),
+    )
+
+    // Convert validation result to agent result format
+    const agentResult = {
+      success: validationResult.success,
+      output: validationResult.success
+        ? `Code generation and validation completed in ${validationResult.attempts} attempt(s)`
+        : `Failed after ${validationResult.attempts} attempt(s)`,
+      error: validationResult.error,
+      changesDetected: validationResult.success,
+    }
 
     if (agentResult.success) {
       // Log agent completion
@@ -377,11 +377,10 @@ async function processTask(
 
       // Push changes to branch
       const commitMessage = `${prompt.substring(0, 50)}${prompt.length > 50 ? '...' : ''}`
-      const pushResult = await pushChangesToBranch(sandbox!, branchName!, commitMessage, logger)
+      const pushResult = await pushChangesToBranchUnified(sandbox!, branchName!, commitMessage, logger)
 
-      // Unregister and shutdown sandbox
-      unregisterSandbox(taskId)
-      const shutdownResult = await shutdownSandbox(sandbox!)
+      // Shutdown sandbox
+      const shutdownResult = await shutdownUnifiedSandbox(sandbox!, taskId)
       if (shutdownResult.success) {
         await logger.success('Sandbox shutdown completed')
       } else {
@@ -413,8 +412,7 @@ async function processTask(
     // Try to shutdown sandbox even on error
     if (sandbox) {
       try {
-        unregisterSandbox(taskId)
-        const shutdownResult = await shutdownSandbox(sandbox)
+        const shutdownResult = await shutdownUnifiedSandbox(sandbox, taskId)
         if (shutdownResult.success) {
           await logger.info('Sandbox shutdown completed after error')
         } else {

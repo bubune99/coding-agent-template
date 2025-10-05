@@ -14,9 +14,12 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:validation": "tsx scripts/test-validation-flow.ts",
+    "test:api": "tsx scripts/direct-api-test.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.42",
     "@neondatabase/serverless": "^0.10.1",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -29,6 +32,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.13",
     "@types/js-cookie": "^3.0.6",
+    "@v0-sdk/react": "^0.3.1",
     "@vercel/sandbox": "^0.0.21",
     "ai": "5.0.51",
     "class-variance-authority": "^0.7.1",
@@ -45,8 +49,15 @@
     "react-dom": "19.1.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
+    "v0-sdk": "^0.14.0",
     "vaul": "^1.1.2",
-    "zod": "^4.1.11"
+    "zod": "^4.1.11",
+    "swr": "^2.3.6",
+    "use-stick-to-bottom": "^1.1.1",
+    "streamdown": "^1.0.12",
+    "embla-carousel-react": "^8.6.0",
+    "react-syntax-highlighter": "^15.6.6",
+    "shiki": "^3.12.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -54,6 +65,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "husky": "^9.1.7",

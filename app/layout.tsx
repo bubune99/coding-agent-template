@@ -4,6 +4,8 @@ import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AppLayoutWrapper } from '@/components/app-layout-wrapper'
+import { StreamingProvider } from '@/contexts/streaming-context'
+import { SWRProvider } from '@/components/v0/providers/swr-provider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,8 +32,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <AppLayoutWrapper>{children}</AppLayoutWrapper>
-          <Toaster />
+          <SWRProvider>
+            <StreamingProvider>
+              <AppLayoutWrapper>{children}</AppLayoutWrapper>
+              <Toaster />
+            </StreamingProvider>
+          </SWRProvider>
         </ThemeProvider>
       </body>
     </html>
