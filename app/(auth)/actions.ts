@@ -4,12 +4,23 @@
 
 'use server'
 
-export async function signInAction(email: string, password: string) {
-  // Stub implementation
+type ActionState = {
+  type: 'error' | 'success'
+  message: string
+} | undefined
+
+export async function signInAction(
+  prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  // Stub implementation - authentication is disabled
   return { type: 'error', message: 'Authentication not configured' }
 }
 
-export async function signUpAction(email: string, password: string) {
-  // Stub implementation
+export async function signUpAction(
+  prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  // Stub implementation - authentication is disabled
   return { type: 'error', message: 'Authentication not configured' }
 }
