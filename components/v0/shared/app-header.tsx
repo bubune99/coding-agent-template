@@ -18,7 +18,6 @@ interface AppHeaderProps {
 
 export function AppHeader({ className = "" }: AppHeaderProps) {
   const pathname = usePathname()
-  const session = null
   const isHomepage = pathname === "/"
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false)
 
@@ -73,7 +72,7 @@ export function AppHeader({ className = "" }: AppHeaderProps) {
                 Deploy with Vercel
               </Link>
             </Button>
-            <UserNav session={session} />
+            <UserNav />
           </div>
         </div>
       </div>
