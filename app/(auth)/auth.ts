@@ -1,9 +1,6 @@
-/**
- * Auth stub - authentication disabled
- * This is a placeholder for future auth implementation
- */
-
 "use server"
+
+import { stackServerApp } from "@/stack/server"
 
 export type UserType = "guest" | "regular"
 
@@ -17,21 +14,28 @@ export interface Session {
 }
 
 export async function auth(): Promise<Session | null> {
-  return null
+  const user = await stackServerApp.getUser()
+
+  if (!user) {
+    return null
+  }
+
+  return {
+    user: {
+      id: user.id,
+      email: user.primaryEmail ?? undefined,
+      name: user.displayName ?? undefined,
+      type: "regular" as UserType,
+    },
+  }
 }
 
-export async function signIn(provider?: string, options?: { redirect?: boolean; redirectTo?: string }) {
-  return null
+export async function signIn() {
+  // Stack Auth handles sign in through the /handler/signin page
+  return { url: "/handler/signin" }
 }
 
-export async function signOut(options?: { redirect?: boolean; redirectTo?: string }) {
-  return null
+export async function signOut() {
+  // Stack Auth handles sign out through the /handler/signout page
+  return { url: "/handler/signout" }
 }
-
-// Stub handlers for API routes
-export const handlers = {
-  GET: async () => new Response("Auth not configured", { status: 501 }),
-  POST: async () => new Response("Auth not configured", { status: 501 }),
-}
-
-export const { GET, POST } = handlers
