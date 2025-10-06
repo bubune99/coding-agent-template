@@ -1,6 +1,6 @@
 import { DockerContainer } from "@/lib/docker/container"
 import type { TaskLogger } from "@/lib/utils/task-logger"
-import { executePlaywrightTestsVercel } from "@/lib/validation/playwright-vercel-adapter"
+import { executePlaywrightTestsDocker } from "@/lib/validation/playwright-docker-adapter"
 
 export type PreviewMode = "iframe" | "docker"
 export type ValidationStatus = "pending" | "running" | "passed" | "failed" | "error"
@@ -255,14 +255,13 @@ module.exports = nextConfig`
       const testSpec = this.generateTestSpec(url)
       await container.runCommand("sh", ["-c", `echo '${testSpec}' > tests/generated.spec.ts`])
 
-      // Run Playwright tests
-      const results = await executePlaywrightTestsVercel(container, "tests/generated.spec.ts", logger)
+      const results = await executePlaywrightTestsDocker(container, "tests/generated.spec.ts", logger)
 
       return {
-        status: results.success ? "passed" : "failed",
-        passed: results.passed || 0,
-        failed: results.failed || 0,
-        total: (results.passed || 0) + (results.failed || 0),
+        status: results.passed ? "passed" : "failed",
+        passed: results.testsPassed || 0,
+        failed: results.testsFailed || 0,
+        total: (results.testsPassed || 0) + (results.testsFailed || 0),
         errors: results.errors,
         duration: results.duration,
       }
