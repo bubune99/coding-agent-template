@@ -144,10 +144,5 @@
     "tw-animate-css": "^1.3.8",
     "typescript": "^5",
     "vercel": "^48.2.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "@radix-ui/react-use-effect-event": "npm:@radix-ui/react-use-callback-ref@^1.1.0"
-    }
   }
 }
