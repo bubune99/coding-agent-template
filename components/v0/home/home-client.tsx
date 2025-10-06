@@ -1,8 +1,10 @@
-'use client'
+"use client"
 
-import { useState, useEffect, useRef, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import type React from "react"
+
+import { useState, useEffect, useRef, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
 import {
   PromptInput,
   PromptInputImageButton,
@@ -18,15 +20,15 @@ import {
   loadPromptFromStorage,
   clearPromptFromStorage,
   type ImageAttachment,
-} from '@/components/v0/ai-elements/prompt-input'
-import { Suggestions, Suggestion } from '@/components/v0/ai-elements/suggestion'
-import { AppHeader } from '@/components/v0/shared/app-header'
-import { useStreaming } from '@/contexts/streaming-context'
-import { StreamingMessage } from '@v0-sdk/react'
-import { ChatMessages } from '@/components/v0/chat/chat-messages'
-import { ChatInput } from '@/components/v0/chat/chat-input'
-import { PreviewPanel } from '@/components/v0/chat/preview-panel'
-import { ResizableLayout } from '@/components/v0/shared/resizable-layout'
+} from "@/components/v0/ai-elements/prompt-input"
+import { Suggestions, Suggestion } from "@/components/v0/ai-elements/suggestion"
+import { AppHeader } from "@/components/v0/shared/app-header"
+import { useStreaming } from "@/contexts/streaming-context"
+import { StreamingMessage } from "@v0-sdk/react"
+import { ChatMessages } from "@/components/v0/chat/chat-messages"
+import { ChatInput } from "@/components/v0/chat/chat-input"
+import { PreviewPanel } from "@/components/v0/chat/preview-panel"
+import { ResizableLayout } from "@/components/v0/shared/resizable-layout"
 
 // Component that uses useSearchParams - needs to be wrapped in Suspense
 function SearchParamsHandler({ onReset }: { onReset: () => void }) {
@@ -34,14 +36,14 @@ function SearchParamsHandler({ onReset }: { onReset: () => void }) {
 
   // Reset UI when reset parameter is present
   useEffect(() => {
-    const reset = searchParams.get('reset')
-    if (reset === 'true') {
+    const reset = searchParams.get("reset")
+    if (reset === "true") {
       onReset()
 
       // Remove the reset parameter from URL without triggering navigation
       const newUrl = new URL(window.location.href)
-      newUrl.searchParams.delete('reset')
-      window.history.replaceState({}, '', newUrl.pathname)
+      newUrl.searchParams.delete("reset")
+      window.history.replaceState({}, "", newUrl.pathname)
     }
   }, [searchParams, onReset])
 
@@ -49,14 +51,14 @@ function SearchParamsHandler({ onReset }: { onReset: () => void }) {
 }
 
 export function HomeClient() {
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showChatInterface, setShowChatInterface] = useState(false)
   const [attachments, setAttachments] = useState<ImageAttachment[]>([])
   const [isDragOver, setIsDragOver] = useState(false)
   const [chatHistory, setChatHistory] = useState<
     Array<{
-      type: 'user' | 'assistant'
+      type: "user" | "assistant"
       content: string | any
       isStreaming?: boolean
       stream?: ReadableStream<Uint8Array> | null
@@ -79,7 +81,7 @@ export function HomeClient() {
     setChatHistory([])
     setCurrentChatId(null)
     setCurrentChat(null)
-    setMessage('')
+    setMessage("")
     setAttachments([])
     setIsLoading(false)
     setIsFullscreen(false)
@@ -129,7 +131,7 @@ export function HomeClient() {
       const newAttachments = await Promise.all(files.map((file) => createImageAttachment(file)))
       setAttachments((prev) => [...prev, ...newAttachments])
     } catch (error) {
-      console.error('Error processing image files:', error)
+      console.error("Error processing image files:", error)
     }
   }
 
@@ -159,24 +161,24 @@ export function HomeClient() {
     // Clear sessionStorage immediately upon submission
     clearPromptFromStorage()
 
-    setMessage('')
+    setMessage("")
     setAttachments([])
 
     // Immediately show chat interface and add user message
     setShowChatInterface(true)
     setChatHistory([
       {
-        type: 'user',
+        type: "user",
         content: userMessage,
       },
     ])
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
+      const response = await fetch("/api/chat", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message: userMessage,
@@ -186,11 +188,11 @@ export function HomeClient() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create chat')
+        throw new Error("Failed to create chat")
       }
 
       if (!response.body) {
-        throw new Error('No response body for streaming')
+        throw new Error("No response body for streaming")
       }
 
       setIsLoading(false)
@@ -199,20 +201,20 @@ export function HomeClient() {
       setChatHistory((prev) => [
         ...prev,
         {
-          type: 'assistant',
+          type: "assistant",
           content: [],
           isStreaming: true,
           stream: response.body,
         },
       ])
     } catch (error) {
-      console.error('Error creating chat:', error)
+      console.error("Error creating chat:", error)
       setIsLoading(false)
       setChatHistory((prev) => [
         ...prev,
         {
-          type: 'assistant',
-          content: 'Sorry, there was an error processing your message. Please try again.',
+          type: "assistant",
+          content: "Sorry, there was an error processing your message. Please try again.",
         },
       ])
     }
@@ -221,30 +223,12 @@ export function HomeClient() {
   const handleChatData = async (chatData: any) => {
     if (chatData.id) {
       // Only set currentChat if it's not already set or if this is the main chat object
-      if (!currentChatId || chatData.object === 'chat') {
+      if (!currentChatId || chatData.object === "chat") {
         setCurrentChatId(chatData.id)
         setCurrentChat({ id: chatData.id })
 
         // Update URL without triggering Next.js routing
-        window.history.pushState(null, '', `/chats/${chatData.id}`)
-      }
-
-      // Create ownership record for new chat (only if this is a new chat)
-      if (!currentChatId) {
-        try {
-          await fetch('/api/chat/ownership', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              chatId: chatData.id,
-            }),
-          })
-        } catch (error) {
-          console.error('Failed to create chat ownership:', error)
-          // Don't fail the UI if ownership creation fails
-        }
+        window.history.pushState(null, "", `/chats/${chatData.id}`)
       }
     }
   }
@@ -277,7 +261,7 @@ export function HomeClient() {
             if (response.ok) {
               return response.json()
             } else {
-              console.warn('Failed to fetch chat details:', response.status)
+              console.warn("Failed to fetch chat details:", response.status)
               return null
             }
           })
@@ -292,7 +276,7 @@ export function HomeClient() {
             }
           })
           .catch((error) => {
-            console.error('Error fetching demo URL:', error)
+            console.error("Error fetching demo URL:", error)
           })
       }
 
@@ -306,17 +290,17 @@ export function HomeClient() {
     if (!message.trim() || isLoading || !currentChatId) return
 
     const userMessage = message.trim()
-    setMessage('')
+    setMessage("")
     setIsLoading(true)
 
     // Add user message to chat history
-    setChatHistory((prev) => [...prev, { type: 'user', content: userMessage }])
+    setChatHistory((prev) => [...prev, { type: "user", content: userMessage }])
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
+      const response = await fetch("/api/chat", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message: userMessage,
@@ -326,11 +310,11 @@ export function HomeClient() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to send message')
+        throw new Error("Failed to send message")
       }
 
       if (!response.body) {
-        throw new Error('No response body for streaming')
+        throw new Error("No response body for streaming")
       }
 
       setIsLoading(false)
@@ -339,19 +323,19 @@ export function HomeClient() {
       setChatHistory((prev) => [
         ...prev,
         {
-          type: 'assistant',
+          type: "assistant",
           content: [],
           isStreaming: true,
           stream: response.body,
         },
       ])
     } catch (error) {
-      console.error('Error:', error)
+      console.error("Error:", error)
       setChatHistory((prev) => [
         ...prev,
         {
-          type: 'assistant',
-          content: 'Sorry, there was an error sending your message. Please try again.',
+          type: "assistant",
+          content: "Sorry, there was an error sending your message. Please try again.",
         },
       ])
       setIsLoading(false)
@@ -414,7 +398,7 @@ export function HomeClient() {
                   onComplete={handleStreamingComplete}
                   onChatData={handleChatData}
                   onError={(error) => {
-                    console.error('Streaming error:', error)
+                    console.error("Streaming error:", error)
                     setIsLoading(false)
                   }}
                 />
@@ -469,16 +453,16 @@ export function HomeClient() {
                 <PromptInputTools>
                   <PromptInputMicButton
                     onTranscript={(transcript) => {
-                      setMessage((prev) => prev + (prev ? ' ' : '') + transcript)
+                      setMessage((prev) => prev + (prev ? " " : "") + transcript)
                     }}
                     onError={(error) => {
-                      console.error('Speech recognition error:', error)
+                      console.error("Speech recognition error:", error)
                     }}
                     disabled={isLoading}
                   />
                   <PromptInputSubmit
                     disabled={!message.trim() || isLoading}
-                    status={isLoading ? 'streaming' : 'ready'}
+                    status={isLoading ? "streaming" : "ready"}
                   />
                 </PromptInputTools>
               </PromptInputToolbar>
@@ -490,7 +474,7 @@ export function HomeClient() {
             <Suggestions>
               <Suggestion
                 onClick={() => {
-                  setMessage('Landing page')
+                  setMessage("Landing page")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -503,7 +487,7 @@ export function HomeClient() {
               />
               <Suggestion
                 onClick={() => {
-                  setMessage('Todo app')
+                  setMessage("Todo app")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -516,7 +500,7 @@ export function HomeClient() {
               />
               <Suggestion
                 onClick={() => {
-                  setMessage('Dashboard')
+                  setMessage("Dashboard")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -529,7 +513,7 @@ export function HomeClient() {
               />
               <Suggestion
                 onClick={() => {
-                  setMessage('Blog')
+                  setMessage("Blog")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -542,7 +526,7 @@ export function HomeClient() {
               />
               <Suggestion
                 onClick={() => {
-                  setMessage('E-commerce')
+                  setMessage("E-commerce")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -555,7 +539,7 @@ export function HomeClient() {
               />
               <Suggestion
                 onClick={() => {
-                  setMessage('Portfolio')
+                  setMessage("Portfolio")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -568,7 +552,7 @@ export function HomeClient() {
               />
               <Suggestion
                 onClick={() => {
-                  setMessage('Chat app')
+                  setMessage("Chat app")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -581,7 +565,7 @@ export function HomeClient() {
               />
               <Suggestion
                 onClick={() => {
-                  setMessage('Calculator')
+                  setMessage("Calculator")
                   // Submit after setting message
                   setTimeout(() => {
                     const form = textareaRef.current?.form
@@ -598,7 +582,7 @@ export function HomeClient() {
           {/* Footer */}
           <div className="mt-16 text-center text-sm text-muted-foreground">
             <p>
-              Powered by{' '}
+              Powered by{" "}
               <Link href="https://v0-sdk.dev" className="text-foreground hover:underline">
                 v0 SDK
               </Link>
