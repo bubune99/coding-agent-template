@@ -1,13 +1,3 @@
-import type { UserType } from '@/app/(auth)/auth'
+// This file is kept as a placeholder for future auth implementation
 
-declare module 'next-auth' {
-  interface User {
-    type: UserType
-  }
-
-  interface Session {
-    user: User & {
-      id: string
-    }
-  }
-}
+export type UserType = "guest" | "regular"

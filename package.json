@@ -82,7 +82,6 @@
     "mysql2": "latest",
     "nanoid": "latest",
     "next": "15.2.4",
-    "next-auth": "5.0.0-beta.29",
     "next-themes": "latest",
     "path": "latest",
     "pg": "latest",
