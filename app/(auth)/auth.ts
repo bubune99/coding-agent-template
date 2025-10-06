@@ -3,18 +3,17 @@
  * This is a placeholder for v0's auth system
  */
 
-import NextAuth from 'next-auth'
-import type { NextAuthConfig } from 'next-auth'
+import NextAuth from "next-auth"
 
-export type UserType = 'guest' | 'regular'
+export type UserType = "guest" | "regular"
 
-const config: NextAuthConfig = {
+const config = {
   providers: [],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
-    authorized: async ({ auth }) => {
+    authorized: async ({ auth }: { auth: any }) => {
       // Allow all requests for now (authentication disabled)
       return true
     },
