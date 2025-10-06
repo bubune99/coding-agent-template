@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 
-import { users, chat_ownerships, anonymous_chat_logs, type User } from "./schema"
+import { users, chat_ownerships, anonymous_chat_logs, type User, type ChatOwnership } from "./schema"
 import { nanoid } from "nanoid"
 import { generateHashedPassword } from "./utils"
 import db from "./connection"
@@ -113,7 +113,7 @@ export async function getChatOwnership(v0ChatId: string) {
 export async function getChatIdsByUserId(userId: string): Promise<string[]> {
   try {
     const ownerships = await db.select().from(chat_ownerships).where(eq(chat_ownerships.user_id, userId))
-    return ownerships.map((o) => o.v0_chat_id)
+    return ownerships.map((o: ChatOwnership) => o.v0_chat_id)
   } catch (error) {
     console.error("Failed to get chat IDs by user ID:", error)
     throw error
