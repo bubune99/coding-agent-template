@@ -1,5 +1,3 @@
-import "server-only"
-
 import { and, count, desc, eq, gte } from "drizzle-orm"
 
 import { users, chat_ownerships, anonymous_chat_logs, type User } from "./schema"

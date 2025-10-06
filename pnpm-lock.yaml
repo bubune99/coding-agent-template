@@ -252,7 +252,7 @@ importers:
         specifier: ^2.15.0
         version: 2.15.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       server-only:
-        specifier: latest
+        specifier: 0.0.1
         version: 0.0.1
       shiki:
         specifier: ^3.12.2
