@@ -66,7 +66,6 @@
     "@radix-ui/react-toggle-group": "^1.1.6",
     "@radix-ui/react-tooltip": "latest",
     "@radix-ui/react-use-controllable-state": "latest",
-    "@stack-auth/next": "latest",
     "@stackframe/stack": "latest",
     "@tidbcloud/serverless": "latest",
     "@types/better-sqlite3": "latest",
