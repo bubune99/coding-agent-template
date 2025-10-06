@@ -10,13 +10,19 @@ interface ModeToggleProps {
 }
 
 export function ModeToggle({ initialMode, onChange }: ModeToggleProps) {
-  const [mode, setModeState] = useState<"build" | "features">(initialMode || "features")
+  const [mode, setModeState] = useState<"build" | "features">(() => {
+    if (typeof window !== "undefined") {
+      return getMode()
+    }
+    return initialMode || "features"
+  })
 
   useEffect(() => {
-    // Load mode from cookie on mount
     const savedMode = getMode()
-    setModeState(savedMode)
-  }, [])
+    if (savedMode !== mode) {
+      setModeState(savedMode)
+    }
+  }, [initialMode])
 
   const handleModeChange = (newMode: "build" | "features") => {
     setModeState(newMode)

@@ -96,8 +96,7 @@ export function HomePageHeader({ selectedOwner, selectedRepo, onOwnerChange, onR
   }
 
   const handleModeChange = (mode: "build" | "features") => {
-    // Reload the page to switch modes
-    router.refresh()
+    window.location.href = "/"
   }
 
   const actions = (
