@@ -103,6 +103,7 @@
     "react-day-picker": "latest",
     "react-dom": "^19",
     "react-syntax-highlighter": "latest",
+    "recharts": "^2.15.0",
     "server-only": "latest",
     "shiki": "^3.12.2",
     "sonner": "latest",
