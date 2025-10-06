@@ -45,13 +45,13 @@ export class PreviewManager {
     try {
       const iframeHealthy = await this.checkIframeHealth(iframeUrl)
       if (iframeHealthy) {
-        logger.log("Using iframe preview (fast mode)")
+        await logger.info("Using iframe preview (fast mode)")
         // Start background validation
         this.startBackgroundValidation(chatId, code, logger)
         return result
       }
     } catch (error) {
-      logger.warn("Iframe preview failed, falling back to Docker")
+      await logger.info("Iframe preview failed, falling back to Docker")
     }
 
     // Fallback to Docker preview
@@ -81,7 +81,7 @@ export class PreviewManager {
     code: string,
     logger: TaskLogger,
   ): Promise<{ url: string; validation: Promise<ValidationResult> }> {
-    logger.log("Creating Docker container for preview...")
+    await logger.info("Creating Docker container for preview...")
 
     const container = new DockerContainer(
       {
@@ -97,10 +97,10 @@ export class PreviewManager {
     this.containers.set(chatId, container)
 
     // Write generated code
-    logger.log("Writing generated code to container...")
+    await logger.info("Writing generated code to container...")
     await this.writeCodeToContainer(container, code)
 
-    logger.log("Starting Next.js dev server...")
+    await logger.info("Starting Next.js dev server...")
     const { url } = await container.startDevServer()
 
     // Start validation in background
@@ -118,11 +118,11 @@ export class PreviewManager {
   private startBackgroundValidation(chatId: string, code: string, logger: TaskLogger): void {
     const validation = (async () => {
       try {
-        logger.log("Starting background validation...")
+        await logger.info("Starting background validation...")
         const dockerResult = await this.createDockerPreview(chatId, code, logger)
         return await dockerResult.validation
       } catch (error) {
-        logger.error("Background validation failed:", error)
+        await logger.error(`Background validation failed: ${error instanceof Error ? error.message : "Unknown error"}`)
         return {
           status: "error" as ValidationStatus,
           passed: 0,
@@ -249,7 +249,7 @@ module.exports = nextConfig`
     logger: TaskLogger,
   ): Promise<ValidationResult> {
     try {
-      logger.log("Running Playwright validation...")
+      await logger.info("Running Playwright validation...")
 
       // Generate basic test spec
       const testSpec = this.generateTestSpec(url)
@@ -267,7 +267,7 @@ module.exports = nextConfig`
         duration: results.duration,
       }
     } catch (error) {
-      logger.error("Playwright validation error:", error)
+      await logger.error(`Playwright validation error: ${error instanceof Error ? error.message : "Unknown error"}`)
       return {
         status: "error",
         passed: 0,
