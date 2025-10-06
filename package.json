@@ -100,7 +100,7 @@
     "pg": "latest",
     "postgres": "latest",
     "react": "^19",
-    "react-day-picker": "^9.4.4",
+    "react-day-picker": "latest",
     "react-dom": "^19",
     "react-syntax-highlighter": "latest",
     "server-only": "latest",
