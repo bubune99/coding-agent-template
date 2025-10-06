@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient, type ChatDetail } from "v0-sdk"
 import { auth } from "@/app/(auth)/auth"
-import { previewManager } from "@/lib/v0/preview-manager"
 
 // Create v0 client with custom baseUrl if V0_API_URL is set
 const v0 = createClient(process.env.V0_API_URL ? { baseUrl: process.env.V0_API_URL } : {})
@@ -64,9 +63,9 @@ export async function POST(request: NextRequest) {
 
         if (chat instanceof ReadableStream) {
           // Start background validation in parallel
-          previewManager.validateInBackground(chatId, message).catch((error) => {
-            console.error("[v0] Background validation error:", error)
-          })
+          // previewManager.validateInBackground(chatId, message).catch((error) => {
+          //   console.error("[v0] Background validation error:", error)
+          // })
         }
 
         // Return the stream directly
