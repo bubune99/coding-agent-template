@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "chatId and code are required" }, { status: 400 })
     }
 
-    const logger = new TaskLogger()
+    const logger = new TaskLogger(chatId)
     const result = await previewManager.triggerDockerPreview(chatId, code, logger)
 
     return NextResponse.json(result)
