@@ -60,7 +60,7 @@ The coding agent template now includes a **complete validation and rollback syst
 
 ### Complete Flow:
 
-```
+\`\`\`
 User Submits Task
   ↓
 Agent Generates Code (Attempt 1)
@@ -100,7 +100,7 @@ SUCCESS    Analyze Errors
                  ↓      Manual
            (back to
             Agent)
-```
+\`\`\`
 
 ---
 
@@ -110,7 +110,7 @@ SUCCESS    Analyze Errors
 
 In `app/api/tasks/route.ts`:
 
-```typescript
+\`\`\`typescript
 const validationResult = await executeAgentWithValidation(
   sandbox,
   prompt,
@@ -128,11 +128,11 @@ const validationResult = await executeAgentWithValidation(
     },
   },
 )
-```
+\`\`\`
 
 ### Environment Variables Required
 
-```bash
+\`\`\`bash
 # For test generation (GPT-4)
 AI_GATEWAY_API_KEY=your_openai_api_key
 
@@ -142,7 +142,7 @@ GITHUB_TOKEN=your_github_token
 
 # Database
 POSTGRES_URL=your_postgres_url
-```
+\`\`\`
 
 ---
 
@@ -183,7 +183,7 @@ POSTGRES_URL=your_postgres_url
 ## Example Execution
 
 ### Successful Case:
-```
+\`\`\`
 [Attempt 1] Agent generates code
 [Attempt 1] Tests generated: e2e/tests/generated-validation.spec.ts
 [Attempt 1] Playwright installed
@@ -191,10 +191,10 @@ POSTGRES_URL=your_postgres_url
 [Attempt 1] ✅ All tests passed! (5/5)
 [Attempt 1] Version created: abc123 (stable)
 SUCCESS - Code committed and pushed
-```
+\`\`\`
 
 ### Retry Case:
-```
+\`\`\`
 [Attempt 1] Agent generates code
 [Attempt 1] Tests generated
 [Attempt 1] Running tests...
@@ -210,10 +210,10 @@ Feedback: Fix these issues:
 [Attempt 2] ✅ All tests passed! (5/5)
 [Attempt 2] Version created: ghi789 (stable)
 SUCCESS
-```
+\`\`\`
 
 ### Rollback Case:
-```
+\`\`\`
 [Attempt 1] Agent generates code
 [Attempt 1] Running tests... ❌ 3/5 failed
 [Attempt 1] Errors: [selector not found, timeout, assertion failed]
@@ -232,7 +232,7 @@ Alternative Suggestions:
 - Verify component is actually rendering
 
 ROLLED BACK to commit abc123
-```
+\`\`\`
 
 ---
 
@@ -269,11 +269,11 @@ For each task, the system tracks:
 ## How to Test
 
 1. **Setup environment**:
-   ```bash
+   \`\`\`bash
    AI_GATEWAY_API_KEY=your_key
    ANTHROPIC_API_KEY=your_key
    GITHUB_TOKEN=your_token
-   ```
+   \`\`\`
 
 2. **Create a Next.js task**:
    - Prompt: "Add a contact form with email validation"
@@ -323,7 +323,7 @@ For each task, the system tracks:
 
 ### Disable Validation for Specific Tasks
 
-```typescript
+\`\`\`typescript
 // In task route, pass custom config
 const validationResult = await executeAgentWithValidation(
   sandbox,
@@ -335,11 +335,11 @@ const validationResult = await executeAgentWithValidation(
     enableValidation: false,  // Skip validation
   },
 )
-```
+\`\`\`
 
 ### Custom Retry Strategy
 
-```typescript
+\`\`\`typescript
 {
   enableValidation: true,
   maxAttempts: 5,  // More attempts
@@ -349,11 +349,11 @@ const validationResult = await executeAgentWithValidation(
     autoRollback: false,   // Require manual confirmation
   },
 }
-```
+\`\`\`
 
 ### Access Version History
 
-```typescript
+\`\`\`typescript
 const versionController = new VersionController(sandbox, logger)
 const history = versionController.getVersionHistory()
 
@@ -362,14 +362,14 @@ history.forEach(version => {
   console.log(`Stable: ${version.isStable}`)
   console.log(`Tests: ${version.testResults?.testsPassed}/${version.testResults?.testsTotal}`)
 })
-```
+\`\`\`
 
 ---
 
 ## Architecture Summary
 
 **Components:**
-```
+\`\`\`
 ┌─────────────────────────────────────────┐
 │    Validation Orchestrator              │
 │  (Main coordination logic)              │
@@ -401,7 +401,7 @@ history.forEach(version => {
            │  Rollback   │
            │   Engine    │
            └─────────────┘
-```
+\`\`\`
 
 **This is your validation layer MVP** - the foundation for intelligent code generation with automatic testing and error recovery.
 

@@ -16,23 +16,23 @@
 ## 📦 What Gets Installed
 
 ### Vercel Sandbox
-```bash
+\`\`\`bash
 playwright-core          # Lightweight Playwright
 @sparticuz/chromium     # Serverless Chromium (~50MB)
-```
+\`\`\`
 
 ### Docker
-```bash
+\`\`\`bash
 @playwright/test        # Full Playwright
 chromium + deps         # Full browser (~280MB)
-```
+\`\`\`
 
 ---
 
 ## 🧪 What Tests Work Where
 
 ### ✅ Works in BOTH modes:
-```typescript
+\`\`\`typescript
 // Functional tests
 await page.click('button')
 await page.fill('input', 'value')
@@ -48,10 +48,10 @@ await page.check('input[type="checkbox"]')
 
 // Network
 await page.route('**/api/data', route => route.fulfill({ json: mockData }))
-```
+\`\`\`
 
 ### ❌ Docker ONLY:
-```typescript
+\`\`\`typescript
 // Screenshots
 await page.screenshot({ path: 'test.png' })
 await expect(page).toHaveScreenshot('baseline.png')
@@ -61,7 +61,7 @@ test.use({ video: 'on' })
 
 // Interactive debugging
 await page.pause()
-```
+\`\`\`
 
 ---
 
@@ -70,39 +70,39 @@ await page.pause()
 ### Auto-Installed by Platform
 The platform automatically detects your execution mode and installs the right packages:
 
-```typescript
+\`\`\`typescript
 // You don't need to do anything!
 // Platform handles installation based on:
 // - Docker mode → Full Playwright + browser
 // - Vercel mode → playwright-core + @sparticuz/chromium
-```
+\`\`\`
 
 ### Manual Installation (if needed)
-```bash
+\`\`\`bash
 # Install dependencies
 pnpm install
 
 # For Vercel: No additional steps
 # For Docker: Ensure Docker is running
 docker ps
-```
+\`\`\`
 
 ---
 
 ## 🎛️ Switching Modes
 
 ### Via UI Toggle
-```tsx
+\`\`\`tsx
 import { ExecutionModeToggle } from '@/components/execution-mode-toggle'
 
 <ExecutionModeToggle />
-```
+\`\`\`
 
 ### Via Environment Variable
-```bash
+\`\`\`bash
 # .env.local
 EXECUTION_MODE=docker   # or 'vercel'
-```
+\`\`\`
 
 ### Via Cookie (set by UI)
 - Cookie name: `execution_mode`
@@ -113,7 +113,7 @@ EXECUTION_MODE=docker   # or 'vercel'
 ## 📝 Writing Tests
 
 ### ✅ Good (Portable)
-```typescript
+\`\`\`typescript
 test('login', async ({ page }) => {
   await page.goto('http://localhost:3000/login')
   await page.fill('[name=email]', 'test@test.com')
@@ -121,10 +121,10 @@ test('login', async ({ page }) => {
   await page.click('button[type=submit]')
   await expect(page).toHaveURL(/.*dashboard/)
 })
-```
+\`\`\`
 
 ### ⚠️ Mode-Specific
-```typescript
+\`\`\`typescript
 test('visual check', async ({ page }) => {
   await page.goto('http://localhost:3000')
 
@@ -135,15 +135,15 @@ test('visual check', async ({ page }) => {
     await expect(page.locator('header')).toBeVisible()
   }
 })
-```
+\`\`\`
 
 ### ❌ Bad (Docker-only, no fallback)
-```typescript
+\`\`\`typescript
 test('homepage', async ({ page }) => {
   await page.goto('http://localhost:3000')
   await expect(page).toHaveScreenshot('home.png') // Fails in Vercel!
 })
-```
+\`\`\`
 
 ---
 
@@ -186,7 +186,7 @@ test('homepage', async ({ page }) => {
 
 ## 📊 Feature Comparison
 
-```
+\`\`\`
 Vercel Sandbox:
 ✅ Headless testing
 ✅ DOM assertions
@@ -204,7 +204,7 @@ Docker:
 ✅ Visual regression
 ✅ Multi-browser
 ✅ Full debugging
-```
+\`\`\`
 
 ---
 

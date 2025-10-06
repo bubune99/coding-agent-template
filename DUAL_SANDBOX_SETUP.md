@@ -23,7 +23,7 @@ Your platform now supports **two execution modes** for running AI agents and val
 ### Using Vercel Sandbox (Cloud)
 
 **1. Set environment variables:**
-```bash
+\`\`\`bash
 # .env.local
 VERCEL_TEAM_ID=team_xxxxx
 VERCEL_PROJECT_ID=prj_xxxxx
@@ -31,7 +31,7 @@ VERCEL_TOKEN=your_vercel_token
 
 # Optional: Force Vercel mode
 EXECUTION_MODE=vercel
-```
+\`\`\`
 
 **2. Get Vercel credentials:**
 - Team ID: https://vercel.com/teams/settings
@@ -39,9 +39,9 @@ EXECUTION_MODE=vercel
 - Token: https://vercel.com/account/tokens
 
 **3. Start application:**
-```bash
+\`\`\`bash
 pnpm dev
-```
+\`\`\`
 
 The platform will automatically use Vercel Sandbox when tokens are configured.
 
@@ -50,7 +50,7 @@ The platform will automatically use Vercel Sandbox when tokens are configured.
 ### Using Docker (Local)
 
 **1. Install Docker:**
-```bash
+\`\`\`bash
 # macOS
 brew install --cask docker
 
@@ -59,24 +59,24 @@ sudo apt-get install docker.io
 
 # Windows
 # Download from https://www.docker.com/products/docker-desktop
-```
+\`\`\`
 
 **2. Set environment variable (optional):**
-```bash
+\`\`\`bash
 # .env.local
 EXECUTION_MODE=docker
-```
+\`\`\`
 
 **3. Start Docker daemon:**
-```bash
+\`\`\`bash
 # Ensure Docker is running
 docker ps
-```
+\`\`\`
 
 **4. Start application:**
-```bash
+\`\`\`bash
 pnpm dev
-```
+\`\`\`
 
 ---
 
@@ -86,21 +86,21 @@ pnpm dev
 
 Add the execution mode toggle to your UI:
 
-```tsx
+\`\`\`tsx
 // In your task form or header
 import { ExecutionModeToggle } from '@/components/execution-mode-toggle'
 
 <ExecutionModeToggle />
-```
+\`\`\`
 
 Users can switch between modes in the UI, and preferences are saved in cookies.
 
 ### Method 2: Environment Variable
 
-```bash
+\`\`\`bash
 # .env.local
 EXECUTION_MODE=docker  # or 'vercel'
-```
+\`\`\`
 
 This overrides user preferences and forces a specific mode.
 
@@ -135,7 +135,7 @@ The platform checks in this order:
 
 ### Vercel Sandbox Environment Variables
 
-```bash
+\`\`\`bash
 # Required for Vercel Sandbox
 VERCEL_TEAM_ID=team_xxxxx          # Your Vercel team ID
 VERCEL_PROJECT_ID=prj_xxxxx        # Your Vercel project ID
@@ -143,15 +143,15 @@ VERCEL_TOKEN=xxxxxxxxx             # Your Vercel API token
 
 # Optional
 EXECUTION_MODE=vercel              # Force Vercel mode
-```
+\`\`\`
 
 ### Docker Environment Variables
 
-```bash
+\`\`\`bash
 # Optional
 EXECUTION_MODE=docker              # Force Docker mode
 DOCKER_SOCKET=/var/run/docker.sock # Custom Docker socket path (advanced)
-```
+\`\`\`
 
 ---
 
@@ -159,7 +159,7 @@ DOCKER_SOCKET=/var/run/docker.sock # Custom Docker socket path (advanced)
 
 ### Test Vercel Sandbox
 
-```bash
+\`\`\`bash
 # Set Vercel tokens
 export VERCEL_TEAM_ID=team_xxxxx
 export VERCEL_PROJECT_ID=prj_xxxxx
@@ -170,16 +170,16 @@ export EXECUTION_MODE=vercel
 
 # Run dev server
 pnpm dev
-```
+\`\`\`
 
 Create a task and verify logs show:
-```
+\`\`\`
 Using vercel execution mode
-```
+\`\`\`
 
 ### Test Docker
 
-```bash
+\`\`\`bash
 # Ensure Docker is running
 docker ps
 
@@ -188,12 +188,12 @@ export EXECUTION_MODE=docker
 
 # Run dev server
 pnpm dev
-```
+\`\`\`
 
 Create a task and verify logs show:
-```
+\`\`\`
 Using docker execution mode
-```
+\`\`\`
 
 ---
 
@@ -201,7 +201,7 @@ Using docker execution mode
 
 ### Example: Add to Home Page Header
 
-```tsx
+\`\`\`tsx
 // components/home-page-header.tsx
 import { ExecutionModeToggle } from '@/components/execution-mode-toggle'
 
@@ -216,11 +216,11 @@ export function HomePageHeader() {
     </header>
   )
 }
-```
+\`\`\`
 
 ### Example: Add to Task Form
 
-```tsx
+\`\`\`tsx
 // components/task-form.tsx
 import { ExecutionModeToggle } from '@/components/execution-mode-toggle'
 
@@ -238,7 +238,7 @@ export function TaskForm() {
     </form>
   )
 }
-```
+\`\`\`
 
 ---
 
@@ -262,18 +262,18 @@ export function TaskForm() {
 ### Docker Issues
 
 **Error: "Cannot connect to Docker daemon"**
-```bash
+\`\`\`bash
 # Start Docker daemon
 sudo systemctl start docker  # Linux
 open -a Docker              # macOS
-```
+\`\`\`
 
 **Error: "Permission denied"**
-```bash
+\`\`\`bash
 # Add your user to docker group (Linux)
 sudo usermod -aG docker $USER
 newgrp docker
-```
+\`\`\`
 
 **Error: "Container creation failed"**
 - Ensure Docker has sufficient resources (CPU/Memory)
@@ -338,7 +338,7 @@ Vercel Sandbox **does NOT support X11/GUI applications**, so we use a serverless
 - ❌ Tests requiring browser GUI
 
 **Implementation:**
-```typescript
+\`\`\`typescript
 // Vercel Sandbox uses @sparticuz/chromium (serverless-optimized)
 // Automatically configured when using Vercel mode
 
@@ -348,7 +348,7 @@ test('button should be clickable', async ({ page }) => {
   await page.click('button#submit')
   await expect(page.locator('.success')).toBeVisible()
 })
-```
+\`\`\`
 
 ### Docker (Full Support)
 
@@ -362,7 +362,7 @@ Docker supports full Playwright functionality including visual testing:
 - ✅ Multiple browser engines (Chromium, Firefox, WebKit)
 
 **Implementation:**
-```typescript
+\`\`\`typescript
 // Docker uses full Playwright with browser binaries
 test('visual regression test', async ({ page }) => {
   await page.goto('http://localhost:3000')
@@ -373,7 +373,7 @@ test('visual regression test', async ({ page }) => {
   // Visual comparison (Docker only)
   await expect(page).toHaveScreenshot('baseline.png')
 })
-```
+\`\`\`
 
 ### Choosing the Right Mode for Testing
 

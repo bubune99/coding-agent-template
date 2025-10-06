@@ -37,7 +37,7 @@ We have 3 options:
 
 **Action**: Add v0's color variables to your existing CSS:
 
-```css
+\`\`\`css
 /* Add to your app/globals.css */
 
 /* v0 sidebar colors */
@@ -62,7 +62,7 @@ We have 3 options:
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-```
+\`\`\`
 
 #### Option B: Replace with v0's CSS (Clean Slate)
 **Pros:**
@@ -92,7 +92,7 @@ We have 3 options:
 
 ### Required (v0 has, you might not):
 
-```bash
+\`\`\`bash
 # Check which you're missing
 pnpm list next-auth
 pnpm list swr
@@ -102,11 +102,11 @@ pnpm list react-syntax-highlighter
 pnpm list shiki
 pnpm list streamdown
 pnpm list use-stick-to-bottom
-```
+\`\`\`
 
 ### Install missing dependencies:
 
-```bash
+\`\`\`bash
 # Authentication (if using v0's auth)
 pnpm add next-auth@5.0.0-beta.25
 
@@ -128,7 +128,7 @@ pnpm add streamdown
 
 # Scroll utilities (if using v0's chat)
 pnpm add use-stick-to-bottom
-```
+\`\`\`
 
 ---
 
@@ -151,7 +151,7 @@ Likely no middleware or different middleware.
 #### If NOT using v0's auth:
 Create minimal middleware just for what you need:
 
-```typescript
+\`\`\`typescript
 // middleware.ts
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -171,7 +171,7 @@ export const config = {
     '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 }
-```
+\`\`\`
 
 #### If using v0's auth:
 Copy the middleware and install next-auth.
@@ -202,7 +202,7 @@ Likely `ThemeProvider` only.
 
 Update your `app/layout.tsx` to include v0's providers:
 
-```tsx
+\`\`\`tsx
 // app/layout.tsx
 import { StreamingProvider } from '@/contexts/streaming-context'
 import { SWRProvider } from '@/components/v0/providers/swr-provider'
@@ -223,7 +223,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-```
+\`\`\`
 
 **Note**: You can skip `SessionProvider` if not using NextAuth.
 
@@ -236,9 +236,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 Let me check what hooks exist:
 
-```bash
+\`\`\`bash
 ls /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/v0-clone/hooks/
-```
+\`\`\`
 
 **Likely hooks:**
 - `use-local-storage.ts`
@@ -249,14 +249,14 @@ ls /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/v0-clone/ho
 ### Solution:
 Copy the hooks directory if needed:
 
-```bash
+\`\`\`bash
 cp -r /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/v0-clone/hooks ./hooks-v0
-```
+\`\`\`
 
 Then import with:
-```tsx
+\`\`\`tsx
 import { useLocalStorage } from '@/hooks-v0/use-local-storage'
-```
+\`\`\`
 
 ---
 
@@ -270,9 +270,9 @@ Global type definitions.
 ### Solution:
 Check if you need these types:
 
-```bash
+\`\`\`bash
 ls /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/v0-clone/types/
-```
+\`\`\`
 
 Copy if needed.
 
@@ -282,7 +282,7 @@ Copy if needed.
 
 ### What v0 Requires:
 
-```bash
+\`\`\`bash
 # v0-clone/.env.local (example)
 
 # Auth
@@ -294,7 +294,7 @@ POSTGRES_URL=postgresql://...
 
 # v0 SDK
 V0_API_KEY=your-v0-api-key
-```
+\`\`\`
 
 ### What You Have:
 Your `.env.local` with different variables.
@@ -302,16 +302,16 @@ Your `.env.local` with different variables.
 ### Solution:
 Merge environment variables. Add to your `.env.local`:
 
-```bash
+\`\`\`bash
 # v0 Auth (if using NextAuth)
 AUTH_SECRET=generate-random-secret-here
 NEXTAUTH_URL=http://localhost:3000
-```
+\`\`\`
 
 Generate `AUTH_SECRET`:
-```bash
+\`\`\`bash
 openssl rand -base64 32
-```
+\`\`\`
 
 ---
 
@@ -344,9 +344,9 @@ Need to copy:
 ### 🔴 High Priority (Required for v0 to work):
 
 1. **Install missing dependencies**:
-   ```bash
+   \`\`\`bash
    pnpm add swr use-stick-to-bottom streamdown
-   ```
+   \`\`\`
 
 2. **Update app/layout.tsx**:
    Add `StreamingProvider` and `SWRProvider`
@@ -357,9 +357,9 @@ Need to copy:
 ### 🟡 Medium Priority (Recommended):
 
 4. **Copy hooks directory**:
-   ```bash
+   \`\`\`bash
    cp -r v0-clone/hooks ./hooks-v0
-   ```
+   \`\`\`
 
 5. **Add middleware** (if needed):
    Create basic middleware.ts
@@ -376,7 +376,7 @@ Need to copy:
 
 ## Quick Start Script
 
-```bash
+\`\`\`bash
 #!/bin/bash
 
 echo "Installing v0 dependencies..."
@@ -395,7 +395,7 @@ echo "Manual steps:"
 echo "1. Update app/layout.tsx with StreamingProvider and SWRProvider"
 echo "2. Add sidebar CSS variables to app/globals.css"
 echo "3. (Optional) Set up NextAuth if using auth features"
-```
+\`\`\`
 
 ---
 

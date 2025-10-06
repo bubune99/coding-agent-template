@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   title: 'Coding Agent Template',
   description:
     'AI-powered coding agent template supporting Claude Code, OpenAI Codex CLI, Cursor CLI, and opencode with Vercel Sandbox',
+    generator: 'v0.app'
 }
 
 export default function RootLayout({

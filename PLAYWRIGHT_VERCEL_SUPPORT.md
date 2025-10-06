@@ -12,7 +12,7 @@ But with important limitations due to the serverless environment.
 
 Vercel Sandbox supports **headless Playwright testing** using `@sparticuz/chromium`, a serverless-optimized Chromium build:
 
-```typescript
+\`\`\`typescript
 // Functional tests work perfectly
 test('form submission', async ({ page }) => {
   await page.goto('http://localhost:3000')
@@ -34,7 +34,7 @@ test('data loading', async ({ page }) => {
   await expect(page.locator('.loading')).not.toBeVisible()
   await expect(page.locator('.user-data')).toBeVisible()
 })
-```
+\`\`\`
 
 **Supported test types:**
 - ✅ Functional tests (clicks, forms, navigation)
@@ -55,17 +55,17 @@ test('data loading', async ({ page }) => {
 Vercel Sandbox runs in a **headless Linux environment without X11/GUI support**, which means:
 
 **❌ No Visual Testing:**
-```typescript
+\`\`\`typescript
 // These won't work in Vercel Sandbox:
 await page.screenshot({ path: 'screenshot.png' }) // ❌ No screenshots
 await expect(page).toHaveScreenshot('baseline.png') // ❌ No visual comparison
-```
+\`\`\`
 
 **❌ No Video Recording:**
-```typescript
+\`\`\`typescript
 // Video recording requires GUI
 test.use({ video: 'on' }) // ❌ Won't work
-```
+\`\`\`
 
 **❌ No Browser Debugging:**
 - Can't use `page.pause()` for interactive debugging
@@ -82,7 +82,7 @@ test.use({ video: 'on' }) // ❌ Won't work
 
 ### Architecture
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────┐
 │         Your Test Code                      │
 └─────────────────┬───────────────────────────┘
@@ -108,29 +108,29 @@ test.use({ video: 'on' }) // ❌ Won't work
 │ + firefox    │    │   chromium       │
 │ + webkit     │    │                  │
 └──────────────┘    └──────────────────┘
-```
+\`\`\`
 
 ### Installation Process
 
 **Docker:**
-```bash
+\`\`\`bash
 npm install -D @playwright/test
 npx playwright install chromium --with-deps
-```
+\`\`\`
 
 **Vercel Sandbox:**
-```bash
+\`\`\`bash
 npm install -D playwright-core
 npm install -D @sparticuz/chromium
 # No browser installation needed - uses bundled binary
-```
+\`\`\`
 
 ### Implementation Details
 
 The platform automatically detects the execution mode and uses the appropriate Playwright adapter:
 
 **File: `lib/validation/test-executor.ts`**
-```typescript
+\`\`\`typescript
 if (mode === 'docker') {
   // Full Playwright with browser binaries
   await container.runCommand('npm', ['install', '-D', '@playwright/test'])
@@ -139,10 +139,10 @@ if (mode === 'docker') {
   // Serverless-optimized Playwright
   await installPlaywrightVercel(sandbox, logger)
 }
-```
+\`\`\`
 
 **File: `lib/validation/playwright-vercel-adapter.ts`**
-```typescript
+\`\`\`typescript
 export async function installPlaywrightVercel(sandbox: Sandbox, logger: TaskLogger) {
   // Install playwright-core (lighter than full playwright)
   await sandbox.runCommand('npm', ['install', '-D', 'playwright-core'])
@@ -150,7 +150,7 @@ export async function installPlaywrightVercel(sandbox: Sandbox, logger: TaskLogg
   // Install serverless Chromium
   await sandbox.runCommand('npm', ['install', '-D', '@sparticuz/chromium'])
 }
-```
+\`\`\`
 
 ---
 
@@ -160,7 +160,7 @@ export async function installPlaywrightVercel(sandbox: Sandbox, logger: TaskLogg
 
 Tests are automatically configured for serverless when running in Vercel mode:
 
-```typescript
+\`\`\`typescript
 // playwright.config.ts (generated automatically)
 import { defineConfig } from '@playwright/test'
 import chromium from '@sparticuz/chromium'
@@ -174,11 +174,11 @@ export default defineConfig({
     },
   },
 })
-```
+\`\`\`
 
 ### Environment Variables
 
-```bash
+\`\`\`bash
 # Force Vercel mode
 EXECUTION_MODE=vercel
 
@@ -186,7 +186,7 @@ EXECUTION_MODE=vercel
 VERCEL_TEAM_ID=team_xxxxx
 VERCEL_PROJECT_ID=prj_xxxxx
 VERCEL_TOKEN=your_token
-```
+\`\`\`
 
 ---
 
@@ -230,7 +230,7 @@ VERCEL_TOKEN=your_token
 
 Write tests that work in both modes:
 
-```typescript
+\`\`\`typescript
 // ✅ Good - Works in both Docker and Vercel
 test('login flow', async ({ page }) => {
   await page.goto('http://localhost:3000/login')
@@ -258,7 +258,7 @@ test('homepage appearance', async ({ page }) => {
     await expect(page.locator('nav')).toContainText('Home')
   }
 })
-```
+\`\`\`
 
 ---
 
@@ -267,38 +267,38 @@ test('homepage appearance', async ({ page }) => {
 ### Vercel Sandbox Issues
 
 **Error: "Executable doesn't exist at .cache/ms-playwright/chromium"**
-```
+\`\`\`
 ✅ Solution: This is expected. The adapter uses @sparticuz/chromium instead.
 The error should not appear with the updated adapter.
-```
+\`\`\`
 
 **Error: "ENOENT: no such file or directory, open '/tmp/playwright'"**
-```
+\`\`\`
 ✅ Solution: Ensure you're using playwright-core, not @playwright/test
-```
+\`\`\`
 
 **Error: "Browser closed unexpectedly"**
-```
+\`\`\`
 ✅ Solution: Add timeout and retry logic:
 test.setTimeout(60000) // Increase timeout
 test.retries(2) // Retry failed tests
-```
+\`\`\`
 
 **Slow test execution**
-```
+\`\`\`
 ✅ Solution: This is normal for cloud execution. Consider:
 - Running critical tests only in Vercel
 - Using Docker for comprehensive test suites
 - Parallelizing tests
-```
+\`\`\`
 
 ### Docker Issues
 
 **Error: "Failed to launch browser"**
-```
+\`\`\`
 ✅ Solution: Ensure browsers are installed:
 npx playwright install chromium --with-deps
-```
+\`\`\`
 
 ---
 
@@ -315,7 +315,7 @@ npx playwright install chromium --with-deps
 
 ### Functional Test (Works Everywhere)
 
-```typescript
+\`\`\`typescript
 import { test, expect } from '@playwright/test'
 
 test.describe('Shopping Cart', () => {
@@ -337,11 +337,11 @@ test.describe('Shopping Cart', () => {
     await expect(page.locator('.cart-item')).toBeVisible()
   })
 })
-```
+\`\`\`
 
 ### Visual Test (Docker Only)
 
-```typescript
+\`\`\`typescript
 import { test, expect } from '@playwright/test'
 
 test.describe('Visual Regression', () => {
@@ -359,7 +359,7 @@ test.describe('Visual Regression', () => {
     })
   })
 })
-```
+\`\`\`
 
 ---
 

@@ -23,9 +23,9 @@ You've successfully completed the major organizational work! Here's what's left 
 
 Run this command:
 
-```bash
+\`\`\`bash
 pnpm add swr use-stick-to-bottom streamdown embla-carousel-react react-syntax-highlighter shiki @types/react-syntax-highlighter
-```
+\`\`\`
 
 **Why we need these:**
 
@@ -41,9 +41,9 @@ pnpm add swr use-stick-to-bottom streamdown embla-carousel-react react-syntax-hi
 
 ### Step 2: Copy Hooks Directory (2 mins)
 
-```bash
+\`\`\`bash
 cp -r /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/v0-clone/hooks ./hooks-v0
-```
+\`\`\`
 
 This copies `use-chat.ts` hook used by v0's chat components.
 
@@ -54,7 +54,7 @@ This copies `use-chat.ts` hook used by v0's chat components.
 Add v0's providers to your root layout.
 
 **Current layout** (yours):
-```tsx
+\`\`\`tsx
 // app/layout.tsx
 import { ThemeProvider } from '@/components/theme-provider'
 
@@ -67,10 +67,10 @@ export default function RootLayout({ children }) {
     </html>
   )
 }
-```
+\`\`\`
 
 **Updated layout** (with v0 providers):
-```tsx
+\`\`\`tsx
 // app/layout.tsx
 import { ThemeProvider } from '@/components/theme-provider'
 import { StreamingProvider } from '@/contexts/streaming-context'
@@ -91,7 +91,7 @@ export default function RootLayout({ children }) {
     </html>
   )
 }
-```
+\`\`\`
 
 **What each provider does:**
 - `ThemeProvider`: Your existing dark/light theme
@@ -104,7 +104,7 @@ export default function RootLayout({ children }) {
 
 Add v0's sidebar color variables to your `app/globals.css`:
 
-```css
+\`\`\`css
 /* Add these to your existing globals.css */
 
 /* v0 Sidebar Colors */
@@ -131,7 +131,7 @@ Add v0's sidebar color variables to your `app/globals.css`:
     --sidebar-ring: oklch(0.556 0 0);
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -139,7 +139,7 @@ Add v0's sidebar color variables to your `app/globals.css`:
 
 Only if you plan to use protected routes later.
 
-```tsx
+\`\`\`tsx
 // middleware.ts (create this file at root)
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -159,7 +159,7 @@ export const config = {
     '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 }
-```
+\`\`\`
 
 ---
 
@@ -167,7 +167,7 @@ export const config = {
 
 Create a test page to verify everything works:
 
-```tsx
+\`\`\`tsx
 // app/test-v0/page.tsx
 'use client'
 
@@ -180,13 +180,13 @@ export default function TestV0Page() {
     </div>
   )
 }
-```
+\`\`\`
 
 Then:
-```bash
+\`\`\`bash
 pnpm dev
 # Visit: http://localhost:3000/test-v0
-```
+\`\`\`
 
 **Expected result:**
 - v0 home page renders
@@ -199,7 +199,7 @@ pnpm dev
 
 Run this to do Steps 1-2 automatically:
 
-```bash
+\`\`\`bash
 #!/bin/bash
 
 echo "📦 Installing dependencies..."
@@ -216,7 +216,7 @@ echo "1. Update app/layout.tsx (add StreamingProvider + SWRProvider)"
 echo "2. Add sidebar CSS variables to app/globals.css"
 echo "3. Create test page at app/test-v0/page.tsx"
 echo "4. Run: pnpm dev"
-```
+\`\`\`
 
 Save as `install-v0-deps.sh` and run with `bash install-v0-deps.sh`
 
@@ -227,33 +227,33 @@ Save as `install-v0-deps.sh` and run with `bash install-v0-deps.sh`
 After completing all steps:
 
 ### ✅ Dependencies Check
-```bash
+\`\`\`bash
 pnpm list swr
 pnpm list use-stick-to-bottom
 pnpm list streamdown
-```
+\`\`\`
 
 All should show installed versions.
 
 ### ✅ File Structure Check
-```bash
+\`\`\`bash
 ls hooks-v0/use-chat.ts
-```
+\`\`\`
 
 Should exist.
 
 ### ✅ Build Check
-```bash
+\`\`\`bash
 pnpm type-check
-```
+\`\`\`
 
 Should pass with no errors.
 
 ### ✅ Runtime Check
-```bash
+\`\`\`bash
 pnpm dev
 # Visit http://localhost:3000/test-v0
-```
+\`\`\`
 
 Should render v0 home page.
 
@@ -281,7 +281,7 @@ Once v0 components render without errors:
 
 ### 1. Create Build Mode Page
 
-```tsx
+\`\`\`tsx
 // app/build/page.tsx
 'use client'
 
@@ -290,11 +290,11 @@ import { HomeClient } from '@/components/v0/home/home-client'
 export default function BuildModePage() {
   return <HomeClient />
 }
-```
+\`\`\`
 
 ### 2. Add Mode Toggle
 
-```tsx
+\`\`\`tsx
 // components/mode-toggle.tsx
 'use client'
 
@@ -326,13 +326,13 @@ export function ModeToggle() {
     </Tabs>
   )
 }
-```
+\`\`\`
 
 ### 3. Integrate Agent Picker
 
 Modify v0's prompt input to include your agent selector:
 
-```tsx
+\`\`\`tsx
 // components/build-mode-input.tsx
 'use client'
 
@@ -366,7 +366,7 @@ export function BuildModeInput() {
     </div>
   )
 }
-```
+\`\`\`
 
 ---
 

@@ -20,16 +20,16 @@ By default, the system automatically detects which mode to use based on your con
    - Linux: `sudo apt-get install docker.io` or use your package manager
 
 2. **Verify Docker is Running**
-   ```bash
+   \`\`\`bash
    docker --version
    docker ps  # Should not error
-   ```
+   \`\`\`
 
 ### Required Environment Variables (Docker Mode)
 
 Create or update your `.env.local` file:
 
-```bash
+\`\`\`bash
 # Database
 POSTGRES_URL=your_postgres_connection_string
 
@@ -44,7 +44,7 @@ GEMINI_API_KEY=your_gemini_api_key        # For Gemini agent (optional)
 
 # Optional: Force Docker mode (auto-detected by default)
 EXECUTION_MODE=docker
-```
+\`\`\`
 
 ### What You DON'T Need (Docker Mode)
 
@@ -61,30 +61,30 @@ These are only required for Vercel Sandbox mode.
 
 The system automatically chooses the execution mode:
 
-```
+\`\`\`
 If EXECUTION_MODE=docker        → Docker
 If EXECUTION_MODE=vercel        → Vercel Sandbox
 If no Vercel tokens configured  → Docker (default)
 If NODE_ENV=production + Vercel tokens present → Vercel Sandbox
 Otherwise                       → Docker
-```
+\`\`\`
 
 ### Force Docker Mode
 
 Add to `.env.local`:
-```bash
+\`\`\`bash
 EXECUTION_MODE=docker
-```
+\`\`\`
 
 ### Force Vercel Sandbox Mode
 
 Add to `.env.local`:
-```bash
+\`\`\`bash
 EXECUTION_MODE=vercel
 VERCEL_TEAM_ID=your_team_id
 VERCEL_PROJECT_ID=your_project_id
 VERCEL_TOKEN=your_token
-```
+\`\`\`
 
 ---
 
@@ -92,7 +92,7 @@ VERCEL_TOKEN=your_token
 
 ### Architecture
 
-```
+\`\`\`
 User Request
   ↓
 Next.js API (localhost:3000)
@@ -108,7 +108,7 @@ Agent (Claude Code) Executes
 Changes Committed & Pushed
   ↓
 Container Destroyed
-```
+\`\`\`
 
 ### Container Lifecycle
 
@@ -187,24 +187,24 @@ Container Destroyed
 ### "Failed to pull Docker image"
 
 **Solution:**
-```bash
+\`\`\`bash
 # Manually pull the image
 docker pull node:22-slim
-```
+\`\`\`
 
 ### "Permission denied" errors (Linux)
 
 **Solution:**
-```bash
+\`\`\`bash
 # Add your user to docker group
 sudo usermod -aG docker $USER
 # Log out and back in
-```
+\`\`\`
 
 ### Container not cleaning up
 
 **Solution:**
-```bash
+\`\`\`bash
 # List all containers
 docker ps -a | grep coding-agent
 
@@ -213,18 +213,18 @@ docker rm -f <container_id>
 
 # Remove all stopped containers
 docker container prune
-```
+\`\`\`
 
 ### Out of disk space
 
 **Solution:**
-```bash
+\`\`\`bash
 # Remove unused images
 docker image prune -a
 
 # Remove unused volumes
 docker volume prune
-```
+\`\`\`
 
 ---
 
@@ -232,27 +232,27 @@ docker volume prune
 
 ### View Running Containers
 
-```bash
+\`\`\`bash
 docker ps
-```
+\`\`\`
 
 ### Access Container Logs
 
-```bash
+\`\`\`bash
 docker logs <container_id>
-```
+\`\`\`
 
 ### Execute Commands in Running Container
 
-```bash
+\`\`\`bash
 docker exec -it <container_id> /bin/bash
-```
+\`\`\`
 
 ### Debug Container Workspace
 
 Containers are destroyed after task completion, but volumes persist:
 
-```bash
+\`\`\`bash
 # List volumes
 docker volume ls | grep coding-agent
 
@@ -262,7 +262,7 @@ docker volume inspect coding-agent-<task_id>-workspace
 # Create temporary container to access volume
 docker run --rm -it -v coding-agent-<task_id>-workspace:/data node:22-slim bash
 cd /data
-```
+\`\`\`
 
 ---
 
@@ -305,31 +305,31 @@ cd /data
 
 1. Install Docker Desktop
 2. Remove Vercel env vars from `.env.local`:
-   ```bash
+   \`\`\`bash
    # Comment out or remove:
    # VERCEL_TEAM_ID=...
    # VERCEL_PROJECT_ID=...
    # VERCEL_TOKEN=...
-   ```
+   \`\`\`
 3. Add (optional):
-   ```bash
+   \`\`\`bash
    EXECUTION_MODE=docker
-   ```
+   \`\`\`
 4. Restart dev server:
-   ```bash
+   \`\`\`bash
    pnpm dev
-   ```
+   \`\`\`
 
 ### From Docker to Vercel Sandbox
 
 1. Get Vercel credentials
 2. Add to `.env.local`:
-   ```bash
+   \`\`\`bash
    EXECUTION_MODE=vercel
    VERCEL_TEAM_ID=your_team_id
    VERCEL_PROJECT_ID=your_project_id
    VERCEL_TOKEN=your_token
-   ```
+   \`\`\`
 3. Restart dev server
 
 ---

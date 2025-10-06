@@ -25,24 +25,24 @@ You can deploy your own version of the coding agent template to Vercel with one 
 
 ### 1. Clone the repository
 
-```bash
+\`\`\`bash
 git clone https://github.com/vercel-labs/coding-agent-template.git
 cd coding-agent-template
-```
+\`\`\`
 
 ### 2. Install dependencies
 
-```bash
+\`\`\`bash
 pnpm install
-```
+\`\`\`
 
 ### 3. Set up environment variables
 
 Copy the example environment file and fill in your values:
 
-```bash
+\`\`\`bash
 cp .env.example .env.local
-```
+\`\`\`
 
 Required environment variables:
 
@@ -64,16 +64,16 @@ Optional environment variables:
 
 Generate and run database migrations:
 
-```bash
+\`\`\`bash
 pnpm db:generate
 pnpm db:push
-```
+\`\`\`
 
 ### 5. Start the development server
 
-```bash
+\`\`\`bash
 pnpm dev
-```
+\`\`\`
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -142,7 +142,7 @@ The system automatically generates descriptive Git branch names using AI SDK 5 a
 
 ### Database Operations
 
-```bash
+\`\`\`bash
 # Generate migrations
 pnpm db:generate
 
@@ -151,11 +151,11 @@ pnpm db:push
 
 # Open Drizzle Studio
 pnpm db:studio
-```
+\`\`\`
 
 ### Running the App
 
-```bash
+\`\`\`bash
 # Development
 pnpm dev
 
@@ -164,7 +164,7 @@ pnpm build
 
 # Start production server
 pnpm start
-```
+\`\`\`
 
 ## Contributing
 

@@ -82,7 +82,7 @@ Merge the **v0-clone chat interface + live preview** with the **existing agent p
 ## Unified Layout Structure
 
 ### Mode Toggle Component
-```typescript
+\`\`\`typescript
 // components/mode-toggle.tsx
 export function ModeToggle() {
   return (
@@ -104,11 +104,11 @@ export function ModeToggle() {
     </div>
   )
 }
-```
+\`\`\`
 
 ### Layout Breakdown
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────────────────────────┐
 │ Top Bar                                                          │
 │ [Logo] [Mode Toggle] [User Avatar] [Settings]                   │
@@ -139,7 +139,7 @@ export function ModeToggle() {
 │          │  │                                     │  │ └──────┘ │
 │          │  └─────────────────────────────────────┘  │          │
 └──────────┴───────────────────────────────────────────┴──────────┘
-```
+\`\`\`
 
 ---
 
@@ -153,7 +153,7 @@ export function ModeToggle() {
    - Based on v0-clone's PromptInput
    - Add agent/model picker inline
    - Support both initial and follow-up prompts
-   ```tsx
+   \`\`\`tsx
    interface PromptInputV2Props {
      variant: 'initial' | 'followup'
      selectedAgent?: string
@@ -162,37 +162,37 @@ export function ModeToggle() {
      onModelChange?: (model: string) => void
      // ... rest from v0-clone
    }
-   ```
+   \`\`\`
 
 2. **`components/shared/live-preview.tsx`**
    - Copy from v0-clone's Preview
    - Support both v0 demo URLs and localhost URLs
    - Add error states for failed previews
-   ```tsx
+   \`\`\`tsx
    interface LivePreviewProps {
      previewUrl: string
      isLoading?: boolean
      error?: string
    }
-   ```
+   \`\`\`
 
 3. **`components/shared/generation-thumbnails.tsx`**
    - Copy from v0-clone's Thumbnails
    - Only used in Build mode
-   ```tsx
+   \`\`\`tsx
    interface GenerationThumbnailsProps {
      generations: Array<{ id: string; demoUrl: string; label: string }>
      selectedIndex: number
      onSelect: (index: number) => void
      onRegenerate: () => void
    }
-   ```
+   \`\`\`
 
 4. **`components/shared/validation-panel.tsx`**
    - New component for Features mode
    - Shows logs, tests, git diff
    - Combines current TaskPageClient functionality
-   ```tsx
+   \`\`\`tsx
    interface ValidationPanelProps {
      taskId: string
      logs: string[]
@@ -201,7 +201,7 @@ export function ModeToggle() {
      onRetry: () => void
      onStop: () => void
    }
-   ```
+   \`\`\`
 
 ---
 
@@ -228,14 +228,14 @@ export function ModeToggle() {
    - Wrapper that provides mode context
    - Shared top bar with mode toggle
    - Common sidebar structure
-   ```tsx
+   \`\`\`tsx
    interface ModeLayoutProps {
      mode: 'build' | 'features'
      children: React.ReactNode
      showTasksSidebar?: boolean
      showPreviewPanel?: boolean
    }
-   ```
+   \`\`\`
 
 ---
 
@@ -268,7 +268,7 @@ export function ModeToggle() {
 
 **API Endpoints to Create:**
 
-```typescript
+\`\`\`typescript
 // app/api/build/route.ts
 POST /api/build
 {
@@ -292,7 +292,7 @@ POST /api/build/finalize
   repoUrl?: string
 }
 → Creates project in DB, optionally pushes to GitHub
-```
+\`\`\`
 
 ---
 
@@ -335,17 +335,17 @@ POST /api/build/finalize
 
 **Global State (Jotai/Zustand):**
 
-```typescript
+\`\`\`typescript
 // lib/store/mode.ts
 import { atom } from 'jotai'
 
 export const modeAtom = atom<'build' | 'features'>('features')
 export const currentProjectAtom = atom<string | null>(null)
-```
+\`\`\`
 
 **Top Bar Component:**
 
-```tsx
+\`\`\`tsx
 // components/top-bar.tsx
 export function TopBar() {
   const [mode, setMode] = useAtom(modeAtom)
@@ -364,7 +364,7 @@ export function TopBar() {
     </div>
   )
 }
-```
+\`\`\`
 
 ---
 
@@ -385,7 +385,7 @@ export function TopBar() {
 
 ## File Structure (New)
 
-```
+\`\`\`
 app/
 ├── build/
 │   ├── page.tsx                    # Build App mode
@@ -429,7 +429,7 @@ lib/
 │   └── build.ts                    # Build mode state
 └── api/
     └── build-client.ts             # Client-side build API calls
-```
+\`\`\`
 
 ---
 
@@ -437,7 +437,7 @@ lib/
 
 ### Build Mode API Flow
 
-```typescript
+\`\`\`typescript
 // 1. Initial generation
 const response = await fetch('/api/build', {
   method: 'POST',
@@ -469,13 +469,13 @@ await fetch('/api/build/finalize', {
   })
 })
 // Returns: { projectId: string }
-```
+\`\`\`
 
 ### Features Mode API Flow
 
 **Already implemented** - uses existing `/api/tasks` with validation:
 
-```typescript
+\`\`\`typescript
 const response = await fetch('/api/tasks', {
   method: 'POST',
   body: JSON.stringify({
@@ -487,7 +487,7 @@ const response = await fetch('/api/tasks', {
   })
 })
 // Triggers validation orchestrator → test gen → retry logic
-```
+\`\`\`
 
 ---
 
@@ -569,7 +569,7 @@ const response = await fetch('/api/tasks', {
 
 ## Database Schema Updates
 
-```typescript
+\`\`\`typescript
 // lib/db/schema.ts - Add new table
 export const projects = pgTable('projects', {
   id: text('id').primaryKey(),
@@ -591,7 +591,7 @@ export const tasks = pgTable('tasks', {
   // ... existing fields ...
   projectId: text('project_id').references(() => projects.id),
 })
-```
+\`\`\`
 
 ---
 

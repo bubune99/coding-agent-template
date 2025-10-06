@@ -39,23 +39,23 @@
 - Success criteria for each component
 
 **AI Prompt Template:**
-```
+\`\`\`
 Break down this project: [user intent] into:
 - Ordered list of features/components
 - Dependencies between components
 - Validation criteria for each
 - Rollback conditions (when to abandon vs iterate)
-```
+\`\`\`
 
 **Implementation:**
-```typescript
+\`\`\`typescript
 interface MasterAgent {
   decomposeProject(userIntent: string): ProjectBlueprint;
   orchestrateExecution(blueprint: ProjectBlueprint): ExecutionPlan;
   monitorProgress(execution: ExecutionPlan): ExecutionStatus;
   decideNextAction(status: ExecutionStatus): Action;
 }
-```
+\`\`\`
 
 ### 2. Project Mapper Integration
 
@@ -65,22 +65,22 @@ interface MasterAgent {
 - Step-by-step prompts for each component
 
 **AI Prompt Template:**
-```
+\`\`\`
 Given project: [blueprint], generate:
 - File tree with all required files
 - Sequence of generation prompts
 - Validation tests for each component
 - Integration checkpoints
-```
+\`\`\`
 
 **Data Flow:**
-```
+\`\`\`
 User Input → Project Mapper Platform → Blueprint
   ↓
 Master Orchestration Agent → Execution Plan
   ↓
 v0 Generation + Playwright Validation → Validated Code
-```
+\`\`\`
 
 ### 3. Validation Engine
 
@@ -90,7 +90,7 @@ v0 Generation + Playwright Validation → Validated Code
 - Test results from Playwright
 
 **Parse Structure:**
-```typescript
+\`\`\`typescript
 interface ValidationResult {
   component: string;
   expectedBehaviors: string[];
@@ -101,22 +101,22 @@ interface ValidationResult {
   attemptCount: number;
   rollbackThreshold: number;
 }
-```
+\`\`\`
 
 **Implementation:**
-```typescript
+\`\`\`typescript
 class ValidationEngine {
   async validateComponent(code: string, tests: Test[]): Promise<ValidationResult>;
   parseTestResults(playwrightOutput: string): TestResult[];
   shouldRetry(result: ValidationResult): boolean;
   shouldRollback(result: ValidationResult): boolean;
 }
-```
+\`\`\`
 
 ### 4. Version Control & Rollback System
 
 **Decision Tree:**
-```
+\`\`\`
 IF failures > rollbackThreshold:
   Calculate: similarity between current attempt and previous attempts
 
@@ -129,7 +129,7 @@ IF failures > rollbackThreshold:
 
   ELSE:
     → Rollback and flag for human review
-```
+\`\`\`
 
 **Track These Metrics:**
 - Git commits for each iteration
@@ -138,14 +138,14 @@ IF failures > rollbackThreshold:
 - Success metrics per attempt
 
 **Implementation:**
-```typescript
+\`\`\`typescript
 interface VersionControl {
   commitVersion(code: string, metadata: VersionMetadata): string;
   rollbackTo(commitHash: string): void;
   analyzeErrorPattern(history: Version[]): ErrorPattern;
   suggestAlternativeApproach(pattern: ErrorPattern): Approach;
 }
-```
+\`\`\`
 
 ---
 
@@ -153,7 +153,7 @@ interface VersionControl {
 
 ### Master Agent System Prompt
 
-```
+\`\`\`
 You are a Master Orchestration Agent building: [PROJECT_NAME]
 
 INPUT: [User's 1-2 sentence description]
@@ -174,14 +174,14 @@ DECISION FRAMEWORK:
 - If completely blocked: flag for human
 
 OUTPUT: Working, validated, deployed application
-```
+\`\`\`
 
 ### Component Generation Prompts
 
 For each component, generate 3 artifacts:
 
 **1. Generation Prompt (to v0)**
-```
+\`\`\`
 Create [COMPONENT] that:
 - [Feature requirements]
 - [Integration points]
@@ -189,20 +189,20 @@ Create [COMPONENT] that:
 
 Include Playwright tests that verify:
 - [Specific behaviors to test]
-```
+\`\`\`
 
 **2. Validation Prompt (to Playwright)**
-```
+\`\`\`
 Test [COMPONENT] for:
 ✓ [Expected behavior 1]
 ✓ [Expected behavior 2]
 ✗ [Should not do X]
 
 Return structured JSON with pass/fail per check
-```
+\`\`\`
 
 **3. Iteration Prompt (if tests fail)**
-```
+\`\`\`
 Previous attempt failed with:
 [Structured error data]
 
@@ -211,14 +211,14 @@ Fix by:
 - Proposing specific changes
 - Avoiding previous failed approaches
 - If 3rd attempt: consider alternative architecture
-```
+\`\`\`
 
 ---
 
 ## 💾 PART 3: DATA STRUCTURES
 
 ### Project State Schema
-```typescript
+\`\`\`typescript
 interface ProjectState {
   projectId: string;
   userIntent: string;
@@ -239,10 +239,10 @@ interface ProjectState {
     errorPatterns: ErrorPattern[];
   };
 }
-```
+\`\`\`
 
 ### Version History Schema
-```typescript
+\`\`\`typescript
 interface Version {
   commitHash: string;
   timestamp: Date;
@@ -253,10 +253,10 @@ interface Version {
   isStable: boolean;
   improvements: string[]; // What changed from previous
 }
-```
+\`\`\`
 
 ### Rollback Decision Schema
-```typescript
+\`\`\`typescript
 interface RollbackDecision {
   shouldRollback: boolean;
   reason: 'stuck_in_loop' | 'repeated_errors' | 'timeout' | 'manual';
@@ -264,7 +264,7 @@ interface RollbackDecision {
   alternativeApproach: string;
   confidence: number;
 }
-```
+\`\`\`
 
 ---
 
@@ -340,7 +340,7 @@ interface RollbackDecision {
 ## 🔗 PART 5: INTEGRATION WITH PROJECT MAPPER
 
 ### Data Flow Diagram
-```
+\`\`\`
 User Input (1-2 prompts)
   ↓
 Your Project Mapper Platform
@@ -358,10 +358,10 @@ Self-Healing Loop
   → Rolls back: When stuck
   ↓
 Deployed Application
-```
+\`\`\`
 
 ### Integration Prompt Template
-```
+\`\`\`
 Connect project mapper output to orchestration:
 
 INPUT from mapper:
@@ -378,14 +378,14 @@ Transform into orchestration plan:
 4. Decide next action → iterate/rollback/proceed
 
 Return execution graph with decision points
-```
+\`\`\`
 
 ---
 
 ## 🧠 PART 6: ROLLBACK INTELLIGENCE
 
 ### Pattern Recognition Prompt
-```
+\`\`\`
 Analyze failure history:
 [Array of past attempts with errors]
 
@@ -400,10 +400,10 @@ DECISION:
 - If wrong approach → Rollback and pivot to [alternative]
 
 Provide reasoning and confidence score
-```
+\`\`\`
 
 ### Alternative Approach Generator Prompt
-```
+\`\`\`
 Current approach failed 3 times with pattern:
 [Error pattern description]
 
@@ -420,13 +420,13 @@ APPROACH B (Innovative):
 - Rationale: [why this could succeed]
 
 Recommend which to try based on: project constraints, time, complexity
-```
+\`\`\`
 
 ---
 
 ## 🔄 EXECUTION WORKFLOW
 
-```
+\`\`\`
 User Prompt
     ↓
 Project Mapper
@@ -459,7 +459,7 @@ Rollback  Continue
          Complete
             ↓
           Deploy
-```
+\`\`\`
 
 ---
 
@@ -498,27 +498,27 @@ First platform that combines generation + validation + intelligent error recover
 ## 🚦 GETTING STARTED
 
 ### Step 1: Fork the Template
-```bash
+\`\`\`bash
 # Go to GitHub and fork:
 https://github.com/vercel-labs/coding-agent-template
 
 # Then clone YOUR fork:
 git clone https://github.com/YOUR_USERNAME/coding-agent-template.git
 cd coding-agent-template
-```
+\`\`\`
 
 ### Step 2: Install Dependencies
-```bash
+\`\`\`bash
 npm install
 npm install v0-sdk @playwright/test
-```
+\`\`\`
 
 ### Step 3: Configure Environment
-```bash
+\`\`\`bash
 # Create .env.local
 V0_API_KEY=your_v0_api_key
 DATABASE_URL=your_postgres_url
-```
+\`\`\`
 
 ### Step 4: Start Building
 Follow the Week 1 checklist and begin with v0 integration.

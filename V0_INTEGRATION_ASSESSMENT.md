@@ -3,7 +3,7 @@
 ## What You've Copied ✅
 
 ### API Routes (Excellent!)
-```
+\`\`\`
 ✅ /api/chat/route.ts              - Main chat creation/messaging
 ✅ /api/chat/fork/route.ts          - Fork chat to new project
 ✅ /api/chat/delete/route.ts        - Delete chat
@@ -13,7 +13,7 @@
 ✅ /api/chats/[chatId]/visibility/route.ts - Manage visibility
 ✅ /api/auth/guest/route.ts         - Guest auth
 ✅ /api/auth/[...nextauth]/route.ts - NextAuth integration
-```
+\`\`\`
 
 **Assessment**: 🟢 **Complete** - All necessary v0 API routes are present
 
@@ -26,14 +26,14 @@
 You mentioned you haven't copied any components. We need these from v0-clone:
 
 #### Required Components:
-```
+\`\`\`
 ❌ components/layout/preview.tsx          - Live iframe preview
 ❌ components/layout/header.tsx           - Top bar with user + prompt
 ❌ components/layout/thumbnails.tsx       - A/B/C generation selector
 ❌ components/layout/history-sidebar.tsx  - Iteration history (v1, v2, v3)
 ❌ components/shared/generations-view.tsx - Main layout coordinator
 ❌ components/ui/prompt-input.tsx         - Black rounded prompt input
-```
+\`\`\`
 
 **These are the visual components that make v0's UI special.**
 
@@ -41,9 +41,9 @@ You mentioned you haven't copied any components. We need these from v0-clone:
 
 ### 2. **State Management (Critical)**
 
-```
+\`\`\`
 ❌ lib/atoms.ts - Jotai state management for v0 chat flow
-```
+\`\`\`
 
 This file contains:
 - User state
@@ -58,11 +58,11 @@ This file contains:
 ### 3. **Database Queries (If Using DB)**
 
 Check if v0-clone has these:
-```
+\`\`\`
 ? lib/db/queries.ts - Chat ownership, anonymous logs, rate limiting
 ? lib/entitlements.ts - User quotas
 ? lib/errors.ts - Custom error handling
-```
+\`\`\`
 
 **You may already have equivalents in your current codebase.**
 
@@ -70,11 +70,11 @@ Check if v0-clone has these:
 
 ### 4. **App Pages (Optional)**
 
-```
+\`\`\`
 ? app/page.tsx - v0's main chat page
 ? app/projects/[projectId]/page.tsx - Project view
 ? app/projects/[projectId]/chats/[chatId]/page.tsx - Chat detail
-```
+\`\`\`
 
 **We'll create our own pages based on the integration plan, so these are reference only.**
 
@@ -83,7 +83,7 @@ Check if v0-clone has these:
 ## What You Already Have ✅
 
 ### Your Current Platform Has:
-```
+\`\`\`
 ✅ lib/validation/* - Test generation, retry logic, rollback
 ✅ lib/v0/generator.ts - v0 component generation
 ✅ lib/v0/integration.ts - v0 integration layer
@@ -93,7 +93,7 @@ Check if v0-clone has these:
 ✅ components/task-sidebar.tsx - Task list
 ✅ app/api/tasks/* - Task execution API
 ✅ Database schema with tasks table
-```
+\`\`\`
 
 **Your platform already has the backend logic - we just need v0's UI components.**
 
@@ -103,7 +103,7 @@ Check if v0-clone has these:
 
 ### Priority 1: UI Components (Must Have)
 
-```bash
+\`\`\`bash
 # Copy these from v0-clone to your project:
 
 1. components/ui/prompt-input.tsx
@@ -123,19 +123,19 @@ Check if v0-clone has these:
 
 6. components/layout/history-sidebar.tsx
    → Shows iteration history (v1, v2, v3...)
-```
+\`\`\`
 
 ### Priority 2: State Management (Must Have)
 
-```bash
+\`\`\`bash
 7. lib/atoms.ts
    → Jotai state management for chat flow
    → Handles submit logic, loading states, generation updates
-```
+\`\`\`
 
 ### Priority 3: Supporting Files (Nice to Have)
 
-```bash
+\`\`\`bash
 8. lib/entitlements.ts (if exists)
    → User quotas and rate limiting
 
@@ -144,7 +144,7 @@ Check if v0-clone has these:
 
 10. lib/db/queries.ts (if exists)
     → Database helpers for chat ownership
-```
+\`\`\`
 
 ---
 
@@ -181,39 +181,39 @@ Check if v0-clone has these:
 ### Phase 1: Copy Missing Files (Today)
 
 1. **Copy v0 components:**
-   ```bash
+   \`\`\`bash
    # From v0-clone/examples/classic-v0/
    cp -r components/layout/* your-project/components/v0/layout/
    cp -r components/shared/* your-project/components/v0/shared/
    cp components/ui/prompt-input.tsx your-project/components/v0/ui/
-   ```
+   \`\`\`
 
 2. **Copy state management:**
-   ```bash
+   \`\`\`bash
    cp lib/atoms.ts your-project/lib/v0/atoms.ts
-   ```
+   \`\`\`
 
 3. **Copy supporting files:**
-   ```bash
+   \`\`\`bash
    # Only if they exist and you need them
    cp lib/entitlements.ts your-project/lib/v0/
    cp lib/errors.ts your-project/lib/v0/
-   ```
+   \`\`\`
 
 ### Phase 2: Install Dependencies (Today)
 
 Check v0-clone's package.json for dependencies:
-```bash
+\`\`\`bash
 # Likely needed:
 pnpm add jotai  # State management
 pnpm add v0-sdk # Already have this
-```
+\`\`\`
 
 ### Phase 3: Create Build Mode Page (Tomorrow)
 
 Create `/app/build/page.tsx` using v0's components:
 
-```tsx
+\`\`\`tsx
 'use client'
 
 import { useAtom } from 'jotai'
@@ -238,13 +238,13 @@ export default function BuildMode() {
   // Generations view (A/B/C with preview)
   return <GenerationsView chat={currentChat} />
 }
-```
+\`\`\`
 
 ### Phase 4: Adapt for Agent Picker (Next)
 
 Modify `PromptInput` to include agent/model selector:
 
-```tsx
+\`\`\`tsx
 // components/v0/ui/prompt-input-enhanced.tsx
 export function PromptInputEnhanced() {
   return (
@@ -258,11 +258,11 @@ export function PromptInputEnhanced() {
     </div>
   )
 }
-```
+\`\`\`
 
 ### Phase 5: Create Mode Toggle (Next)
 
-```tsx
+\`\`\`tsx
 // components/mode-toggle.tsx
 export function ModeToggle() {
   return (
@@ -274,38 +274,38 @@ export function ModeToggle() {
     </Tabs>
   )
 }
-```
+\`\`\`
 
 ---
 
 ## Dependencies Check
 
 ### Already Installed ✅
-```json
+\`\`\`json
 {
   "v0-sdk": "^0.14.0",
   "@ai-sdk/openai": "^2.0.42",
   "next": "15.x",
   "react": "19.x"
 }
-```
+\`\`\`
 
 ### Need to Install ❌
-```bash
+\`\`\`bash
 pnpm add jotai  # For v0 state management
-```
+\`\`\`
 
 ### Optional (If in v0-clone)
-```bash
+\`\`\`bash
 # Check v0-clone's package.json first
 pnpm add puppeteer  # For screenshot API (thumbnails)
-```
+\`\`\`
 
 ---
 
 ## File Structure After Integration
 
-```
+\`\`\`
 app/
 ├── build/                      # NEW - Build App mode
 │   └── page.tsx
@@ -340,7 +340,7 @@ lib/
 ├── validation/                 # ✅ Already exists
 ├── docker/                     # ✅ Already exists
 └── [existing lib files]
-```
+\`\`\`
 
 ---
 
@@ -379,7 +379,7 @@ lib/
 ## Immediate Next Steps
 
 ### 1. Copy Core Components (15 mins)
-```bash
+\`\`\`bash
 cd /mnt/c/Users/bubun/CascadeProjects/coding-agent-template
 
 # Create v0 namespace
@@ -389,21 +389,21 @@ mkdir -p components/v0/{layout,shared,ui}
 cp /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/classic-v0/components/layout/*.tsx components/v0/layout/
 cp /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/classic-v0/components/shared/*.tsx components/v0/shared/
 cp /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/classic-v0/components/ui/prompt-input.tsx components/v0/ui/
-```
+\`\`\`
 
 ### 2. Copy State Management (5 mins)
-```bash
+\`\`\`bash
 cp /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/classic-v0/lib/atoms.ts lib/v0/atoms.ts
-```
+\`\`\`
 
 ### 3. Install Jotai (2 mins)
-```bash
+\`\`\`bash
 pnpm add jotai
-```
+\`\`\`
 
 ### 4. Test v0 Components (30 mins)
 Create a test page to verify components work:
-```tsx
+\`\`\`tsx
 // app/test-v0/page.tsx
 'use client'
 
@@ -418,7 +418,7 @@ export default function TestV0() {
 
   return <Preview generations={[testGen]} selectedGenerationIndex={0} />
 }
-```
+\`\`\`
 
 ### 5. Create Build Mode Prototype (1 hour)
 Implement basic Build mode page using copied components

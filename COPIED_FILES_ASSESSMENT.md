@@ -9,14 +9,14 @@ You've copied **a lot** of v0-clone files! Let me break down what you have, iden
 ## ✅ New Files Successfully Copied (KEEP)
 
 ### API Routes (Already Had These)
-```
+\`\`\`
 ✅ /api/chat/* - Already existed
 ✅ /api/chats/* - Already existed
 ✅ /api/auth/* - Already existed
-```
+\`\`\`
 
 ### Supporting Libraries (NEW - KEEP)
-```
+\`\`\`
 ✅ lib/entitlements.ts          - Rate limiting config
 ✅ lib/errors.ts                - Custom error classes
 ✅ lib/env-check.ts             - Environment validation
@@ -24,26 +24,26 @@ You've copied **a lot** of v0-clone files! Let me break down what you have, iden
 ✅ lib/db/connection.ts         - Database connection helper
 ✅ lib/db/migrate.ts            - Database migration helper
 ✅ lib/db/utils.ts              - Password hashing, etc.
-```
+\`\`\`
 
 ### Component Directories (NEW - NEED TO REVIEW)
-```
+\`\`\`
 ✅ components/shared/           - App header, chat selector, etc.
 ✅ components/chat/             - Chat input, messages, preview panel
 ✅ components/home/             - Home client component
 ✅ components/chats/            - Chat-related components
 ✅ components/ai-elements/      - AI-specific UI elements
 ✅ components/providers/        - Context providers
-```
+\`\`\`
 
 ### Individual Components (NEW)
-```
+\`\`\`
 ✅ components/auth-form.tsx         - Authentication form
 ✅ components/env-setup.tsx         - Environment setup wizard
 ✅ components/message-renderer.tsx  - Render chat messages
 ✅ components/shared-components.tsx - Shared utility components
 ✅ components/user-nav.tsx          - User navigation menu
-```
+\`\`\`
 
 ---
 
@@ -52,7 +52,7 @@ You've copied **a lot** of v0-clone files! Let me break down what you have, iden
 These files already exist in your project. The "copy" versions are from v0-clone:
 
 ### UI Components (Duplicates)
-```
+\`\`\`
 ⚠️ components/ui/avatar copy.tsx
 ⚠️ components/ui/badge copy.tsx
 ⚠️ components/ui/button copy.tsx
@@ -61,23 +61,23 @@ These files already exist in your project. The "copy" versions are from v0-clone
 ⚠️ components/ui/input copy.tsx
 ⚠️ components/ui/select copy.tsx
 ⚠️ components/ui/textarea copy.tsx
-```
+\`\`\`
 
 **Decision**: Compare v0's versions with yours. If v0's have useful additions, merge them. Otherwise **DELETE the "copy" files**.
 
 ### Library Files (Duplicates)
-```
+\`\`\`
 ⚠️ lib/constants copy.ts
 ⚠️ lib/utils copy.ts
 ⚠️ lib/db/schema copy.ts
-```
+\`\`\`
 
 **Decision**: These likely conflict with your existing files. **Compare and merge if needed, then DELETE**.
 
 ### Directory Duplicate
-```
+\`\`\`
 ⚠️ components/ui copy/
-```
+\`\`\`
 
 **Decision**: Entire duplicate directory! **DELETE this whole folder after comparing**.
 
@@ -92,13 +92,13 @@ These files already exist in your project. The "copy" versions are from v0-clone
 **Solution**: You have 2 options:
 
 ### Option 1: Copy Jotai Atoms (Recommended for Build Mode)
-```bash
+\`\`\`bash
 # Copy the atoms file from v0-clone
 cp /path/to/v0-clone/lib/atoms.ts lib/v0/atoms.ts
 
 # Install Jotai
 pnpm add jotai
-```
+\`\`\`
 
 ### Option 2: Remove Jotai Dependencies (For Custom Integration)
 - Don't copy atoms.ts
@@ -112,7 +112,7 @@ pnpm add jotai
 ## 🗂️ File Organization Recommendation
 
 ### Current Structure (Messy)
-```
+\`\`\`
 components/
 ├── shared/          ← v0 files
 ├── chat/            ← v0 files
@@ -121,10 +121,10 @@ components/
 ├── ui copy/         ← v0 UI (duplicate!)
 ├── task-form.tsx    ← Your files
 └── ...
-```
+\`\`\`
 
 ### Recommended Structure (Clean)
-```
+\`\`\`
 components/
 ├── v0/              ← Namespace all v0 components here
 │   ├── chat/
@@ -134,7 +134,7 @@ components/
 ├── ui/              ← Your existing UI (keep as-is)
 ├── task-form.tsx    ← Your files (keep as-is)
 └── ...
-```
+\`\`\`
 
 **Why**: Clear separation between v0's components and yours. No confusion.
 
@@ -145,11 +145,11 @@ components/
 ### Step 1: Review Duplicates (15 mins)
 
 **UI Components:**
-```bash
+\`\`\`bash
 # Compare each "copy" file with original
 # Example:
 diff components/ui/button.tsx components/ui/button\ copy.tsx
-```
+\`\`\`
 
 **Questions to ask:**
 - Does v0's version have features yours doesn't?
@@ -163,16 +163,16 @@ diff components/ui/button.tsx components/ui/button\ copy.tsx
 
 ### Step 2: Delete Duplicate Directories (2 mins)
 
-```bash
+\`\`\`bash
 cd /mnt/c/Users/bubun/CascadeProjects/coding-agent-template
 
 # Delete the entire duplicate UI folder
 rm -rf "components/ui copy"
-```
+\`\`\`
 
 ### Step 3: Organize v0 Components (10 mins)
 
-```bash
+\`\`\`bash
 # Create v0 namespace
 mkdir -p components/v0
 
@@ -190,11 +190,11 @@ mv components/env-setup.tsx components/v0/
 mv components/message-renderer.tsx components/v0/
 mv components/shared-components.tsx components/v0/
 mv components/user-nav.tsx components/v0/
-```
+\`\`\`
 
 ### Step 4: Handle Library Duplicates (10 mins)
 
-```bash
+\`\`\`bash
 # Compare and merge if needed
 diff lib/constants.ts "lib/constants copy.ts"
 diff lib/utils.ts "lib/utils copy.ts"
@@ -204,39 +204,39 @@ diff lib/db/schema.ts "lib/db/schema copy.ts"
 rm "lib/constants copy.ts"
 rm "lib/utils copy.ts"
 rm "lib/db/schema copy.ts"
-```
+\`\`\`
 
 ### Step 5: Copy Missing Atoms (5 mins)
 
-```bash
+\`\`\`bash
 # Copy from v0-clone
 cp /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/classic-v0/lib/atoms.ts lib/v0/atoms.ts
 
 # Install Jotai
 pnpm add jotai
-```
+\`\`\`
 
 ### Step 6: Update Imports (30 mins)
 
 After moving files to `components/v0/`, you need to update imports:
 
-```tsx
+\`\`\`tsx
 // Before (won't work anymore)
 import { ChatInput } from '@/components/chat/chat-input'
 
 // After (organized under v0 namespace)
 import { ChatInput } from '@/components/v0/chat/chat-input'
-```
+\`\`\`
 
 **Automated approach:**
-```bash
+\`\`\`bash
 # Find all files that import from moved components
 grep -r "from '@/components/chat" --include="*.tsx" --include="*.ts" .
 grep -r "from '@/components/shared" --include="*.tsx" --include="*.ts" .
 grep -r "from '@/components/home" --include="*.tsx" --include="*.ts" .
 
 # Then manually update each import
-```
+\`\`\`
 
 ---
 
@@ -245,33 +245,33 @@ grep -r "from '@/components/home" --include="*.tsx" --include="*.ts" .
 ### What You Have from v0-clone
 
 #### `components/v0/shared/` (After reorganization)
-```
+\`\`\`
 ✅ app-header.tsx           - Top navigation bar
 ✅ chat-menu.tsx            - Chat options menu
 ✅ chat-selector.tsx        - Chat list/selector
 ✅ resizable-layout.tsx     - Resizable panel layout
-```
+\`\`\`
 
 #### `components/v0/chat/`
-```
+\`\`\`
 ✅ chat-input.tsx           - Message input component
 ✅ chat-messages.tsx        - Message list component
 ✅ preview-panel.tsx        - Live preview panel
-```
+\`\`\`
 
 #### `components/v0/home/`
-```
+\`\`\`
 ✅ home-client.tsx          - Home page client component
-```
+\`\`\`
 
 #### `components/v0/` (Standalone)
-```
+\`\`\`
 ✅ auth-form.tsx
 ✅ env-setup.tsx
 ✅ message-renderer.tsx
 ✅ shared-components.tsx
 ✅ user-nav.tsx
-```
+\`\`\`
 
 ---
 
@@ -280,14 +280,14 @@ grep -r "from '@/components/home" --include="*.tsx" --include="*.ts" .
 ### Critical for v0 Integration:
 
 1. **State Management (atoms.ts)** ⚠️ **MUST COPY**
-   ```bash
+   \`\`\`bash
    cp v0-clone/lib/atoms.ts lib/v0/atoms.ts
-   ```
+   \`\`\`
 
 2. **Jotai Package** ⚠️ **MUST INSTALL**
-   ```bash
+   \`\`\`bash
    pnpm add jotai
-   ```
+   \`\`\`
 
 3. **Auth Configuration** (May need)
    - Check if you need NextAuth setup from v0-clone
@@ -302,14 +302,14 @@ grep -r "from '@/components/home" --include="*.tsx" --include="*.ts" .
 ## 🎯 Recommended Next Steps (Priority Order)
 
 ### 1. Install Jotai (2 mins)
-```bash
+\`\`\`bash
 pnpm add jotai
-```
+\`\`\`
 
 ### 2. Copy Atoms File (2 mins)
-```bash
+\`\`\`bash
 cp /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/classic-v0/lib/atoms.ts lib/v0/atoms.ts
-```
+\`\`\`
 
 ### 3. Clean Up Duplicates (20 mins)
 - Compare UI component "copy" files
@@ -337,13 +337,13 @@ cp /mnt/c/Users/bubun/Downloads/v0-clone-main/v0-clone-main/examples/classic-v0/
 
 ### Issue 1: Schema Conflicts
 **Problem**: You have 2 schema files now
-```
+\`\`\`
 lib/db/schema.ts       ← Your existing schema
 lib/db/schema copy.ts  ← v0's schema
-```
+\`\`\`
 
 **Solution**: Merge them manually:
-```typescript
+\`\`\`typescript
 // lib/db/schema.ts (merged)
 
 // Your existing tables
@@ -370,12 +370,12 @@ export const anonymous_chat_logs = pgTable('anonymous_chat_logs', {
   v0_chat_id: text('v0_chat_id').notNull(),
   created_at: timestamp('created_at').defaultNow(),
 })
-```
+\`\`\`
 
 Then delete `lib/db/schema copy.ts` and run:
-```bash
+\`\`\`bash
 pnpm db:push
-```
+\`\`\`
 
 ### Issue 2: Auth Integration
 **Problem**: v0 uses NextAuth, you may have different auth
@@ -393,7 +393,7 @@ pnpm db:push
 **Solution**:
 1. Update imports in v0 components to use new paths
 2. Or use path aliases in tsconfig.json:
-   ```json
+   \`\`\`json
    {
      "compilerOptions": {
        "paths": {
@@ -401,7 +401,7 @@ pnpm db:push
        }
      }
    }
-   ```
+   \`\`\`
 
 ---
 
@@ -423,7 +423,7 @@ pnpm db:push
 
 Here's a bash script to do the cleanup automatically:
 
-```bash
+\`\`\`bash
 #!/bin/bash
 cd /mnt/c/Users/bubun/CascadeProjects/coding-agent-template
 
@@ -470,7 +470,7 @@ echo "1. Merge database schemas (lib/db/schema.ts + deleted schema copy.ts)"
 echo "2. Update imports in v0 components to new paths"
 echo "3. Run: pnpm db:push"
 echo "4. Test v0 components in a test page"
-```
+\`\`\`
 
 Save this as `cleanup-v0.sh` and run with `bash cleanup-v0.sh`.
 

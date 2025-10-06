@@ -10,7 +10,7 @@ The platform now integrates **v0 Platform API** for intelligent UI component gen
 
 ### Smart Detection Flow:
 
-```
+\`\`\`
 User Prompt
   ↓
 Is UI-focused? (button, form, component, etc.)
@@ -27,7 +27,7 @@ Component     ↓
       Validate
          ↓
       Pass/Retry/Rollback
-```
+\`\`\`
 
 ### Example Prompts:
 
@@ -48,19 +48,19 @@ Component     ↓
 ### Enable v0 Integration
 
 In `.env.local`:
-```bash
+\`\`\`bash
 # Required for v0
 V0_API_KEY=your_v0_api_key_here
 
 # Required for test generation
 AI_GATEWAY_API_KEY=your_openai_key
-```
+\`\`\`
 
 Get your v0 API key from: [v0.dev](https://v0.dev)
 
 ### In Code:
 
-```typescript
+\`\`\`typescript
 const validationResult = await executeAgentWithValidation(
   sandbox,
   prompt,
@@ -76,7 +76,7 @@ const validationResult = await executeAgentWithValidation(
     },
   },
 )
-```
+\`\`\`
 
 ---
 
@@ -85,37 +85,37 @@ const validationResult = await executeAgentWithValidation(
 ### Example: "Create a contact form component"
 
 **Step 1: v0 Generation**
-```
+\`\`\`
 ✅ UI-focused prompt detected
 🎨 Generating UI component with v0...
 ✅ v0 component generated successfully
 📝 Writing to: components/ContactForm.tsx
-```
+\`\`\`
 
 **Step 2: Agent Enhancement**
-```
+\`\`\`
 📝 Executing claude agent...
 ✅ Agent adds validation logic, error handling
 ✅ Integrates component into app
-```
+\`\`\`
 
 **Step 3: Automated Testing**
-```
+\`\`\`
 🧪 Generating Playwright tests...
 ✅ Tests generated: e2e/tests/ContactForm.spec.ts
 📦 Installing Playwright...
 🧪 Running tests...
-```
+\`\`\`
 
 **Step 4: Validation Results**
-```
+\`\`\`
 ✅ All tests passed! (5/5)
   ✓ Form renders correctly
   ✓ Email validation works
   ✓ Submit button enabled/disabled
   ✓ Error messages display
   ✓ Success state shows
-```
+\`\`\`
 
 ---
 
@@ -147,7 +147,7 @@ All agents now support v0 integration:
 
 Automatically detects UI prompts and generates with v0.
 
-```typescript
+\`\`\`typescript
 const result = await executeV0IfNeeded(
   sandbox,
   'Create a pricing card component',
@@ -162,13 +162,13 @@ const result = await executeV0IfNeeded(
 if (result.v0Used && result.success) {
   console.log('v0 component generated!')
 }
-```
+\`\`\`
 
 ### `generateV0Component()`
 
 Direct v0 generation (manual control).
 
-```typescript
+\`\`\`typescript
 const result = await generateV0Component(
   {
     prompt: 'Modern login form with social auth buttons',
@@ -181,18 +181,18 @@ const result = await generateV0Component(
 console.log(result.code)        // Generated component code
 console.log(result.componentName) // e.g., "LoginForm"
 console.log(result.filePath)    // e.g., "components/LoginForm.tsx"
-```
+\`\`\`
 
 ### `isUIPrompt()`
 
 Check if a prompt is UI-focused.
 
-```typescript
+\`\`\`typescript
 isUIPrompt('Create a button component')      // true
 isUIPrompt('Fix authentication bug')         // false
 isUIPrompt('Add contact form to homepage')   // true
 isUIPrompt('Update database schema')         // false
-```
+\`\`\`
 
 ---
 
@@ -229,7 +229,7 @@ The system automatically detects UI-focused prompts using these keywords:
 
 ### Disable v0 for Specific Task
 
-```typescript
+\`\`\`typescript
 const result = await executeAgentWithValidation(
   sandbox,
   prompt,
@@ -242,7 +242,7 @@ const result = await executeAgentWithValidation(
     },
   },
 )
-```
+\`\`\`
 
 ### Custom Component Path
 
@@ -253,7 +253,7 @@ Currently auto-detected:
 
 ### Framework-Specific Generation
 
-```typescript
+\`\`\`typescript
 // Next.js App Router
 v0Config: {
   framework: 'nextjs',
@@ -271,7 +271,7 @@ v0Config: {
   framework: 'svelte',
   styling: 'tailwind',
 }
-```
+\`\`\`
 
 ---
 
@@ -310,10 +310,10 @@ v0Config: {
 ### Example 1: Hero Section
 
 **Prompt:**
-```
+\`\`\`
 Create a modern hero section with gradient background, headline,
 subtext, and CTA button
-```
+\`\`\`
 
 **Process:**
 1. ✅ UI-focused detected
@@ -325,10 +325,10 @@ subtext, and CTA button
 ### Example 2: Dashboard Layout
 
 **Prompt:**
-```
+\`\`\`
 Build a dashboard layout with sidebar navigation, header,
 and main content area
-```
+\`\`\`
 
 **Process:**
 1. v0 generates layout structure
@@ -339,9 +339,9 @@ and main content area
 ### Example 3: Non-UI Task
 
 **Prompt:**
-```
+\`\`\`
 Add error handling to the API endpoints
-```
+\`\`\`
 
 **Process:**
 1. ❌ Not UI-focused
@@ -355,12 +355,12 @@ Add error handling to the API endpoints
 
 Track v0 usage in logs:
 
-```
+\`\`\`
 [Attempt 1] UI-focused prompt detected, using v0
 [Attempt 1] v0 component generated: ContactForm.tsx
 [Attempt 1] Playwright tests: 5/5 passed
 SUCCESS - v0 + validation completed in 1 attempt
-```
+\`\`\`
 
 ---
 
