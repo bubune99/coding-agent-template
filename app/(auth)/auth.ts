@@ -7,8 +7,16 @@
 
 export type UserType = "guest" | "regular"
 
-// Stub auth function that returns null (no session)
-export async function auth() {
+export interface Session {
+  user: {
+    id: string
+    email?: string
+    name?: string
+    type: UserType
+  }
+}
+
+export async function auth(): Promise<Session | null> {
   return null
 }
 
