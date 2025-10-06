@@ -26,6 +26,10 @@ export async function POST(request: NextRequest) {
     const session = await auth()
     const { message, chatId, streaming, attachments, projectId } = await request.json()
 
+    if (session?.user?.id) {
+      console.log("Authenticated user:", session.user.id)
+    }
+
     if (!message) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 })
     }

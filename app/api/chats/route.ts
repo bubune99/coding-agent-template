@@ -9,7 +9,14 @@ export async function GET(request: NextRequest) {
   try {
     const session = await auth()
 
-    console.log("Fetching chats - auth disabled, returning empty array")
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+    }
+
+    console.log("Fetching chats for user:", session.user.id)
+
+    // TODO: Implement actual chat fetching logic with user filtering
+    // For now, returning empty array until chat storage is implemented
     return NextResponse.json({ data: [] })
   } catch (error) {
     console.error("Chats fetch error:", error)

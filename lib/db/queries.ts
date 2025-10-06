@@ -1,6 +1,13 @@
 import { eq } from "drizzle-orm"
 
-import { users, chat_ownerships, anonymous_chat_logs, type User, type ChatOwnership } from "./schema"
+import {
+  users,
+  chat_ownerships,
+  anonymous_chat_logs,
+  type User,
+  type ChatOwnership,
+  type AnonymousChatLog,
+} from "./schema"
 import { nanoid } from "nanoid"
 import { generateHashedPassword } from "./utils"
 import db from "./connection"
@@ -160,7 +167,7 @@ export async function getChatCountByIP(ipAddress: string, hoursAgo = 24): Promis
     const logs = await db.select().from(anonymous_chat_logs).where(eq(anonymous_chat_logs.ip_address, ipAddress))
 
     // Filter by time in memory since we don't have a complex where clause
-    const recentLogs = logs.filter((log) => log.created_at >= cutoffTime)
+    const recentLogs = logs.filter((log: AnonymousChatLog) => log.created_at >= cutoffTime)
     return recentLogs.length
   } catch (error) {
     console.error("Failed to get chat count by IP:", error)

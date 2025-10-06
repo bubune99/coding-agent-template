@@ -12,6 +12,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     console.log("Fetching chat details for ID:", chatId)
 
+    if (session?.user?.id) {
+      console.log("Authenticated user:", session.user.id)
+    }
+
     if (!chatId) {
       return NextResponse.json({ error: "Chat ID is required" }, { status: 400 })
     }
