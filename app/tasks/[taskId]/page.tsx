@@ -1,9 +1,9 @@
-import { TaskPageClient } from '@/components/task-page-client'
+import { TaskPageClient } from "@/components/task-page-client"
 
 interface TaskPageProps {
-  params: {
+  params: Promise<{
     taskId: string
-  }
+  }>
 }
 
 export default async function TaskPage({ params }: TaskPageProps) {
@@ -17,6 +17,6 @@ export async function generateMetadata({ params }: TaskPageProps) {
 
   return {
     title: `Task ${taskId} - Coding Agent Platform`,
-    description: 'View task details and execution logs',
+    description: "View task details and execution logs",
   }
 }
