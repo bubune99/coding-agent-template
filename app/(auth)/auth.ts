@@ -12,13 +12,11 @@ export async function auth() {
   return null
 }
 
-// Stub signIn function
-export async function signIn() {
+export async function signIn(provider?: string, options?: { redirect?: boolean; redirectTo?: string }) {
   return null
 }
 
-// Stub signOut function
-export async function signOut() {
+export async function signOut(options?: { redirect?: boolean; redirectTo?: string }) {
   return null
 }
 
