@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { createClient, type ChatDetail } from "v0-sdk"
 import { auth } from "@/app/(auth)/auth"
+import { previewManager } from "@/lib/v0/preview-manager"
 
 // Create v0 client with custom baseUrl if V0_API_URL is set
 const v0 = createClient(process.env.V0_API_URL ? { baseUrl: process.env.V0_API_URL } : {})
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
     if (chatId) {
       // continue existing chat
       if (streaming) {
-        // Return streaming response for existing chat
+        // Return streaming message to existing chat
         console.log("Sending streaming message to existing chat:", {
           chatId,
           message,
@@ -60,6 +61,13 @@ export async function POST(request: NextRequest) {
           ...(attachments && attachments.length > 0 && { attachments }),
         })
         console.log("Streaming message sent to existing chat successfully")
+
+        if (chat instanceof ReadableStream) {
+          // Start background validation in parallel
+          previewManager.validateInBackground(chatId, message).catch((error) => {
+            console.error("[v0] Background validation error:", error)
+          })
+        }
 
         // Return the stream directly
         return new Response(chat as ReadableStream<Uint8Array>, {
@@ -91,6 +99,12 @@ export async function POST(request: NextRequest) {
           ...(attachments && attachments.length > 0 && { attachments }),
         })
         console.log("Streaming chat created successfully")
+
+        if (chat instanceof ReadableStream) {
+          // We don't have chatId yet, so we'll need to extract it from the stream
+          // For now, we'll skip background validation on initial message
+          // It will be triggered on subsequent messages
+        }
 
         // Return the stream directly
         return new Response(chat as ReadableStream<Uint8Array>, {

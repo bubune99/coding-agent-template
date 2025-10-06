@@ -1,10 +1,11 @@
-'use client'
+"use client"
 
-import { PageHeader } from '@/components/page-header'
-import { RepoSelector } from '@/components/repo-selector'
-import { useTasks } from '@/components/app-layout'
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { PageHeader } from "@/components/page-header"
+import { RepoSelector } from "@/components/repo-selector"
+import { ModeToggle } from "@/components/mode-toggle"
+import { useTasks } from "@/components/app-layout"
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,12 +15,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Checkbox } from '@/components/ui/checkbox'
-import { MoreHorizontal, RefreshCw, Trash2 } from 'lucide-react'
-import { useState } from 'react'
-import { toast } from 'sonner'
-import { VERCEL_DEPLOY_URL } from '@/lib/constants'
+} from "@/components/ui/alert-dialog"
+import { Checkbox } from "@/components/ui/checkbox"
+import { MoreHorizontal, RefreshCw, Trash2 } from "lucide-react"
+import { useState } from "react"
+import { toast } from "sonner"
+import { VERCEL_DEPLOY_URL } from "@/lib/constants"
+import { useRouter } from "next/navigation"
 
 interface HomePageHeaderProps {
   selectedOwner: string
@@ -36,14 +38,15 @@ export function HomePageHeader({ selectedOwner, selectedRepo, onOwnerChange, onR
   const [deleteCompleted, setDeleteCompleted] = useState(true)
   const [deleteFailed, setDeleteFailed] = useState(true)
   const [deleteStopped, setDeleteStopped] = useState(true)
+  const router = useRouter()
 
   const handleRefreshRepos = async () => {
     setIsRefreshing(true)
     try {
       // Clear all GitHub-related caches
-      sessionStorage.removeItem('github-owners')
+      sessionStorage.removeItem("github-owners")
       Object.keys(sessionStorage).forEach((key) => {
-        if (key.startsWith('github-repos-')) {
+        if (key.startsWith("github-repos-")) {
           sessionStorage.removeItem(key)
         }
       })
@@ -51,7 +54,7 @@ export function HomePageHeader({ selectedOwner, selectedRepo, onOwnerChange, onR
       // Reload the page to fetch fresh data
       window.location.reload()
     } catch (error) {
-      console.error('Error refreshing repositories:', error)
+      console.error("Error refreshing repositories:", error)
     } finally {
       setIsRefreshing(false)
     }
@@ -59,19 +62,19 @@ export function HomePageHeader({ selectedOwner, selectedRepo, onOwnerChange, onR
 
   const handleDeleteTasks = async () => {
     if (!deleteCompleted && !deleteFailed && !deleteStopped) {
-      toast.error('Please select at least one task type to delete')
+      toast.error("Please select at least one task type to delete")
       return
     }
 
     setIsDeleting(true)
     try {
       const actions = []
-      if (deleteCompleted) actions.push('completed')
-      if (deleteFailed) actions.push('failed')
-      if (deleteStopped) actions.push('stopped')
+      if (deleteCompleted) actions.push("completed")
+      if (deleteFailed) actions.push("failed")
+      if (deleteStopped) actions.push("stopped")
 
-      const response = await fetch(`/api/tasks?action=${actions.join(',')}`, {
-        method: 'DELETE',
+      const response = await fetch(`/api/tasks?action=${actions.join(",")}`, {
+        method: "DELETE",
       })
 
       if (response.ok) {
@@ -82,18 +85,26 @@ export function HomePageHeader({ selectedOwner, selectedRepo, onOwnerChange, onR
         setShowDeleteDialog(false)
       } else {
         const error = await response.json()
-        toast.error(error.error || 'Failed to delete tasks')
+        toast.error(error.error || "Failed to delete tasks")
       }
     } catch (error) {
-      console.error('Error deleting tasks:', error)
-      toast.error('Failed to delete tasks')
+      console.error("Error deleting tasks:", error)
+      toast.error("Failed to delete tasks")
     } finally {
       setIsDeleting(false)
     }
   }
 
+  const handleModeChange = (mode: "build" | "features") => {
+    // Reload the page to switch modes
+    router.refresh()
+  }
+
   const actions = (
     <div className="flex items-center gap-2">
+      {/* Mode Toggle */}
+      <ModeToggle onChange={handleModeChange} />
+
       {/* Deploy to Vercel Button */}
       <Button
         asChild
@@ -118,7 +129,7 @@ export function HomePageHeader({ selectedOwner, selectedRepo, onOwnerChange, onR
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={handleRefreshRepos} disabled={isRefreshing}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Refresh Repositories
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setShowDeleteDialog(true)} disabled={isDeleting}>
@@ -207,7 +218,7 @@ export function HomePageHeader({ selectedOwner, selectedRepo, onOwnerChange, onR
               disabled={isDeleting || (!deleteCompleted && !deleteFailed && !deleteStopped)}
               className="bg-red-600 hover:bg-red-700"
             >
-              {isDeleting ? 'Deleting...' : 'Delete Tasks'}
+              {isDeleting ? "Deleting..." : "Delete Tasks"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

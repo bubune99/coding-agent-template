@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
-import { TaskForm } from '@/components/task-form'
-import { HomePageHeader } from '@/components/home-page-header'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { useTasks } from '@/components/app-layout'
-import { getSelectedOwner, setSelectedOwner, getSelectedRepo, setSelectedRepo } from '@/lib/utils/cookies'
+import { useState } from "react"
+import { TaskForm } from "@/components/task-form"
+import { HomePageHeader } from "@/components/home-page-header"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { useTasks } from "@/components/app-layout"
+import { setSelectedOwner, setSelectedRepo } from "@/lib/utils/cookies"
 
 interface HomePageContentProps {
   initialSelectedOwner?: string
@@ -16,8 +16,8 @@ interface HomePageContentProps {
 }
 
 export function HomePageContent({
-  initialSelectedOwner = '',
-  initialSelectedRepo = '',
+  initialSelectedOwner = "",
+  initialSelectedRepo = "",
   initialInstallDependencies = false,
   initialMaxDuration = 5,
 }: HomePageContentProps) {
@@ -27,16 +27,14 @@ export function HomePageContent({
   const router = useRouter()
   const { refreshTasks, addTaskOptimistically } = useTasks()
 
-  // No longer need the useEffect for loading cookies - they come from server
-
   // Wrapper functions to update both state and cookies
   const handleOwnerChange = (owner: string) => {
     setSelectedOwnerState(owner)
     setSelectedOwner(owner)
     // Clear repo when owner changes
     if (selectedRepo) {
-      setSelectedRepoState('')
-      setSelectedRepo('')
+      setSelectedRepoState("")
+      setSelectedRepo("")
     }
   }
 
@@ -62,27 +60,27 @@ export function HomePageContent({
     router.push(`/tasks/${id}`)
 
     try {
-      const response = await fetch('/api/tasks', {
-        method: 'POST',
+      const response = await fetch("/api/tasks", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...data, id }), // Include the pre-generated ID
       })
 
       if (response.ok) {
-        toast.success('Task created successfully!')
+        toast.success("Task created successfully!")
         // Refresh sidebar to get the real task data from server
         await refreshTasks()
       } else {
         const error = await response.json()
-        toast.error(error.error || 'Failed to create task')
+        toast.error(error.error || "Failed to create task")
         // TODO: Remove the optimistic task on error
         await refreshTasks() // For now, just refresh to remove the optimistic task
       }
     } catch (error) {
-      console.error('Error creating task:', error)
-      toast.error('Failed to create task')
+      console.error("Error creating task:", error)
+      toast.error("Failed to create task")
       // TODO: Remove the optimistic task on error
       await refreshTasks() // For now, just refresh to remove the optimistic task
     } finally {

@@ -1,12 +1,17 @@
+"use client"
+
 import {
   WebPreview,
   WebPreviewNavigation,
   WebPreviewNavigationButton,
   WebPreviewUrl,
   WebPreviewBody,
-} from '@/components/v0/ai-elements/web-preview'
-import { RefreshCw, Monitor, Maximize, Minimize } from 'lucide-react'
-import { cn } from '@/lib/utils'
+} from "@/components/v0/ai-elements/web-preview"
+import { RefreshCw, Monitor, Maximize, Minimize } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { PreviewControls } from "@/components/v0/preview-controls"
+import { ValidationResultsPanel } from "@/components/v0/validation-results-panel"
+import { useState } from "react"
 
 interface Chat {
   id: string
@@ -29,18 +34,62 @@ export function PreviewPanel({
   refreshKey,
   setRefreshKey,
 }: PreviewPanelProps) {
+  const [previewMode, setPreviewMode] = useState<"iframe" | "docker">("iframe")
+  const [dockerUrl, setDockerUrl] = useState<string | null>(null)
+  const [showValidationResults, setShowValidationResults] = useState(false)
+
+  const handleTriggerDocker = async () => {
+    if (!currentChat?.id) return
+
+    try {
+      const response = await fetch("/api/preview/docker", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chatId: currentChat.id,
+          code: "", // Code would come from the chat context
+        }),
+      })
+
+      const result = await response.json()
+      if (result.dockerUrl) {
+        setDockerUrl(result.dockerUrl)
+        setPreviewMode("docker")
+      }
+    } catch (error) {
+      console.error("[v0] Failed to trigger Docker preview:", error)
+    }
+  }
+
+  const previewUrl = previewMode === "docker" && dockerUrl ? dockerUrl : currentChat?.demo
+
   return (
     <div
       className={cn(
-        'flex flex-col h-full transition-all duration-300',
-        isFullscreen ? 'fixed inset-0 z-50 bg-white dark:bg-black' : 'flex-1',
+        "flex flex-col h-full transition-all duration-300",
+        isFullscreen ? "fixed inset-0 z-50 bg-white dark:bg-black" : "flex-1",
       )}
     >
+      {currentChat?.id && (
+        <PreviewControls
+          chatId={currentChat.id}
+          currentMode={previewMode}
+          onTriggerDocker={handleTriggerDocker}
+          onShowResults={() => setShowValidationResults(!showValidationResults)}
+        />
+      )}
+
+      {showValidationResults && currentChat?.id && (
+        <div className="px-4 py-2 border-b">
+          <ValidationResultsPanel chatId={currentChat.id} onClose={() => setShowValidationResults(false)} />
+        </div>
+      )}
+
       <WebPreview
-        defaultUrl={currentChat?.demo || ''}
+        defaultUrl={previewUrl || ""}
         onUrlChange={(url) => {
           // Optional: Handle URL changes if needed
-          console.log('Preview URL changed:', url)
+          console.log("Preview URL changed:", url)
         }}
       >
         <WebPreviewNavigation>
@@ -50,21 +99,21 @@ export function PreviewPanel({
               setRefreshKey((prev) => prev + 1)
             }}
             tooltip="Refresh preview"
-            disabled={!currentChat?.demo}
+            disabled={!previewUrl}
           >
             <RefreshCw className="h-4 w-4" />
           </WebPreviewNavigationButton>
-          <WebPreviewUrl readOnly placeholder="Your app will appear here..." value={currentChat?.demo || ''} />
+          <WebPreviewUrl readOnly placeholder="Your app will appear here..." value={previewUrl || ""} />
           <WebPreviewNavigationButton
             onClick={() => setIsFullscreen(!isFullscreen)}
-            tooltip={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-            disabled={!currentChat?.demo}
+            tooltip={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            disabled={!previewUrl}
           >
             {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
           </WebPreviewNavigationButton>
         </WebPreviewNavigation>
-        {currentChat?.demo ? (
-          <WebPreviewBody key={refreshKey} src={currentChat.demo} />
+        {previewUrl ? (
+          <WebPreviewBody key={refreshKey} src={previewUrl} />
         ) : (
           <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-black">
             <div className="text-center text-border dark:text-input">
