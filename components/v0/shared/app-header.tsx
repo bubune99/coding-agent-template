@@ -1,69 +1,38 @@
-'use client'
+"use client"
 
-import { useState, useEffect, Suspense } from 'react'
-import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { ChatSelector } from './chat-selector'
-import { useSession } from 'next-auth/react'
-import { UserNav } from '@/components/v0/user-nav'
-import { Button } from '@/components/ui/button'
-import { VercelIcon, GitHubIcon } from '@/components/ui/icons'
-import { Info } from 'lucide-react'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import type React from "react"
+
+import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { ChatSelector } from "./chat-selector"
+import { UserNav } from "@/components/v0/user-nav"
+import { Button } from "@/components/ui/button"
+import { VercelIcon, GitHubIcon } from "@/components/ui/icons"
+import { Info } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 interface AppHeaderProps {
   className?: string
 }
 
-// Component that uses useSearchParams - needs to be wrapped in Suspense
-function SearchParamsHandler() {
-  const searchParams = useSearchParams()
-  const { update } = useSession()
-
-  // Force session refresh when redirected after auth
-  useEffect(() => {
-    const shouldRefresh = searchParams.get('refresh') === 'session'
-
-    if (shouldRefresh) {
-      // Force session update
-      update()
-
-      // Clean up URL without causing navigation
-      const url = new URL(window.location.href)
-      url.searchParams.delete('refresh')
-      window.history.replaceState({}, '', url.pathname)
-    }
-  }, [searchParams, update])
-
-  return null
-}
-
-export function AppHeader({ className = '' }: AppHeaderProps) {
+export function AppHeader({ className = "" }: AppHeaderProps) {
   const pathname = usePathname()
-  const { data: session } = useSession()
-  const isHomepage = pathname === '/'
+  const session = null
+  const isHomepage = pathname === "/"
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false)
 
-  // Handle logo click - reset UI if on homepage, otherwise navigate to homepage
   const handleLogoClick = (e: React.MouseEvent) => {
     if (isHomepage) {
       e.preventDefault()
-      // Add reset parameter to trigger UI reset
-      window.location.href = '/?reset=true'
+      window.location.href = "/?reset=true"
     }
-    // If not on homepage, let the Link component handle navigation normally
   }
 
   return (
     <div className={`border-b border-border dark:border-input ${className}`}>
-      {/* Handle search params with Suspense boundary */}
-      <Suspense fallback={null}>
-        <SearchParamsHandler />
-      </Suspense>
-
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Left side - Logo and Selector */}
           <div className="flex items-center gap-4">
             <Link
               href="/"
@@ -75,20 +44,22 @@ export function AppHeader({ className = '' }: AppHeaderProps) {
             <ChatSelector />
           </div>
 
-          {/* Right side - What's This, GitHub, Deploy, and User */}
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="py-1.5 px-2 h-fit text-sm" onClick={() => setIsInfoDialogOpen(true)}>
+            <Button
+              variant="outline"
+              className="py-1.5 px-2 h-fit text-sm bg-transparent"
+              onClick={() => setIsInfoDialogOpen(true)}
+            >
               <Info size={16} />
               What's This?
             </Button>
-            <Button variant="outline" className="py-1.5 px-2 h-fit text-sm" asChild>
+            <Button variant="outline" className="py-1.5 px-2 h-fit text-sm bg-transparent" asChild>
               <Link href="https://github.com/vercel/v0-sdk" target="_blank" rel="noopener noreferrer">
                 <GitHubIcon size={16} />
                 vercel/v0-sdk
               </Link>
             </Button>
 
-            {/* Deploy with Vercel button - hidden on mobile */}
             <Button
               className="bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-zinc-50 dark:text-zinc-900 hidden md:flex py-1.5 px-2 h-fit text-sm"
               asChild
@@ -107,7 +78,6 @@ export function AppHeader({ className = '' }: AppHeaderProps) {
         </div>
       </div>
 
-      {/* Info Dialog */}
       <Dialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -115,7 +85,7 @@ export function AppHeader({ className = '' }: AppHeaderProps) {
           </DialogHeader>
           <div className="space-y-4 text-sm text-gray-600 dark:text-gray-300">
             <p>
-              This is a <strong>demo</strong> of a{' '}
+              This is a <strong>demo</strong> of a{" "}
               <a
                 href="https://v0.app"
                 target="_blank"
@@ -123,11 +93,11 @@ export function AppHeader({ className = '' }: AppHeaderProps) {
                 className="underline text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
               >
                 v0 clone
-              </a>{' '}
+              </a>{" "}
               where users can enter text prompts and generate React components and applications using AI.
             </p>
             <p>
-              It's built with{' '}
+              It's built with{" "}
               <a
                 href="https://nextjs.org"
                 target="_blank"
@@ -135,8 +105,8 @@ export function AppHeader({ className = '' }: AppHeaderProps) {
                 className="underline text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
               >
                 Next.js
-              </a>{' '}
-              and the{' '}
+              </a>{" "}
+              and the{" "}
               <a
                 href="https://v0-sdk.dev"
                 target="_blank"
@@ -144,12 +114,12 @@ export function AppHeader({ className = '' }: AppHeaderProps) {
                 className="underline text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
               >
                 v0 SDK
-              </a>{' '}
+              </a>{" "}
               to provide a full-featured interface with authentication, database integration, and real-time streaming
               responses.
             </p>
             <p>
-              Try the demo or{' '}
+              Try the demo or{" "}
               <a
                 href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fv0-sdk&env=V0_API_KEY,AUTH_SECRET,POSTGRES_URL&envDescription=Learn+more+about+how+to+get+the+required+environment+variables&envLink=https%3A%2F%2Fgithub.com%2Fvercel%2Fv0-sdk%2Fblob%2Fmain%2Fexamples%2Fv0-clone%2FREADME.md%23environment-variables&project-name=v0-clone&repository-name=v0-clone&demo-title=v0+Clone&demo-description=A+full-featured+v0+clone+built+with+Next.js%2C+AI+Elements%2C+and+the+v0+SDK&demo-url=https%3A%2F%2Fclone-demo.v0-sdk.dev&root-directory=examples%2Fv0-clone"
                 target="_blank"

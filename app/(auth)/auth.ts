@@ -1,24 +1,31 @@
 /**
- * NextAuth configuration stub
- * This is a placeholder for v0's auth system
+ * Auth stub - authentication disabled
+ * This is a placeholder for future auth implementation
  */
 
-import NextAuth from "next-auth"
+"use server"
 
 export type UserType = "guest" | "regular"
 
-const config = {
-  providers: [],
-  pages: {
-    signIn: "/login",
-  },
-  callbacks: {
-    authorized: async ({ auth }: { auth: any }) => {
-      // Allow all requests for now (authentication disabled)
-      return true
-    },
-  },
+// Stub auth function that returns null (no session)
+export async function auth() {
+  return null
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth(config)
+// Stub signIn function
+export async function signIn() {
+  return null
+}
+
+// Stub signOut function
+export async function signOut() {
+  return null
+}
+
+// Stub handlers for API routes
+export const handlers = {
+  GET: async () => new Response("Auth not configured", { status: 501 }),
+  POST: async () => new Response("Auth not configured", { status: 501 }),
+}
+
 export const { GET, POST } = handlers

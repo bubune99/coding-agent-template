@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "latest",
-    "@auth/core": "latest",
     "@aws-sdk/client-rds-data": "latest",
     "@cloudflare/workers-types": "latest",
     "@electric-sql/pglite": "latest",
@@ -83,9 +82,8 @@
     "mysql2": "latest",
     "nanoid": "latest",
     "next": "15.2.4",
-    "next-auth": "latest",
+    "next-auth": "5.0.0-beta.29",
     "next-themes": "latest",
-    "nodemailer": "latest",
     "path": "latest",
     "pg": "latest",
     "postgres": "latest",
