@@ -108,7 +108,7 @@
     "react-hook-form": "latest",
     "react-resizable-panels": "latest",
     "react-syntax-highlighter": "latest",
-    "recharts": "latest",
+    "recharts": "^2.15.0",
     "server-only": "latest",
     "shiki": "^3.12.2",
     "sonner": "latest",
